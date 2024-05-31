@@ -1,0 +1,90 @@
+body {
+    font-family: 'Lucida Sans Unicode', sans-serif;
+    margin: 20px;
+}
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-step {
+    display: none;
+}
+.form-step-active {
+    display: block;
+}
+.step-indicator {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 0;
+    list-style: none;
+}
+.step-indicator li {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-top: 2px solid #ccc;
+}
+.step-indicator li.active {
+    border-top: 2px solid #007bff;
+    font-weight: bold;
+    color: #007bff;
+}
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: normal;
+    color: #333;
+}
+.required:after {
+    content: " *";
+    color: red;
+}
+input[type="text"],
+input[type="email"],
+input[type="date"],
+input[type="hidden"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+input[type="checkbox"] {
+    margin-bottom: 10px;
+}
+button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+h1 {
+    font-size:300%;
+    font-weight: bold;
+    font-family: 'Lucida Sans Unicode', sans-serif;
+    margin-top: 0%;
+    margin-bottom: 0%;
+}
+h2 {
+    font-size: 150%;
+    font-weight: lighter;
+    font-family: 'Lucida Sans Unicode', sans-serif;
+    margin-top: 0%;
+}
