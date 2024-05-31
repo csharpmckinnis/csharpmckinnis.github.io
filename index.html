@@ -4,32 +4,23 @@
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
     <title>New Utility Service Application - Cary NC</title>
     <link rel="stylesheet" href="style.css">
-    <!--script src="https://www.google.com/recaptcha/api.js"></script-->
-    
 </head>
 <body>
-    <img src="cary_logo.png" alt="Cary Logo" style="display: block; margin: 0 auto 20px; max-width: 300px;">
-    
-    <form id="webToCaseForm" action="https://carync--prefried.sandbox.my.salesforce.com/servlet/servlet.WebToCase?encoding=UTF-8&orgId=00D020000004hFV" method="POST">
+    <img src="cary_logo.png" alt="Cary Logo" style="display: block; margin: 0 auto 20px; max-width: 150px;">
+    <h1 style="text-align: center; color: #333;">Utility Service Application</h1>
+    <form id="webToCaseForm" action="https://carync--prefried.sandbox.my.salesforce.com/servlet/servlet.WebToCase?encoding=UTF-8&orgId=00D020000004hFV" method="POST" onsubmit="return false;">
         <input type="hidden" name="orgid" value="00D020000004hFV">
         <input type="hidden" name="retURL" value="http://">
-        <!--input type="hidden" name='captcha_settings' value='{"keyname":"GOOGLE_RECAPTCHA_V2","fallback":"true","orgId":"00D020000004hFV","ts":""}'-->
 
-        <!-- Debugging Elements -->
-        <!--input type="hidden" name="debug" value="0"-->
-        <!--input type="hidden" name="debugEmail" value="connor.mckinnis@carync.gov"-->
-
-        
         <div class="form-step form-step-active">
-            <h1 style="text-align: center; color: #333;">Get Started</h1>
-            <h2 style="text-align: center; color: #333;">New Utility Service Application</h2>
-            
-            <!-- General Information -->
             <label for="startServiceDate" class="required">Start Service Date</label>
             <input type="date" id="startServiceDate" name="startServiceDate" required><br>
 
-            <label for="name" class="required">Contact Name</label>
-            <input id="name" maxlength="80" name="name" size="20" type="text" required><br>
+            <label for="firstName" class="required">First Name</label>
+            <input id="firstName" maxlength="40" name="firstName" size="20" type="text" required><br>
+
+            <label for="lastName" class="required">Last Name</label>
+            <input id="lastName" maxlength="40" name="lastName" size="20" type="text" required><br>
 
             <label for="email" class="required">Email</label>
             <input id="email" maxlength="80" name="email" size="20" type="email" required><br>
@@ -54,13 +45,11 @@
         </div>
 
         <div class="form-step">
-            <!-- Account Type -->
             <label>Account Type</label>
-            <input type="checkbox" id="newCustomer" name="Account_Type__c" value="New Customer"> New Customer<br>
-            <input type="checkbox" id="transferAccount" name="Account_Type__c" value="Transfer from Previous Town of Cary Account" onclick="toggleTransferFields()"> Transfer from Previous Town of Cary Account<br>
-            <input type="checkbox" id="landlord" name="Account_Type__c" value="Landlord"> Landlord<br>
+            <input type="radio" id="newCustomer" name="Account_Type__c" value="New Customer"> New Customer<br>
+            <input type="radio" id="transferAccount" name="Account_Type__c" value="Transfer from Previous Town of Cary Account" onclick="toggleTransferFields()"> Transfer from Previous Town of Cary Account<br>
+            <input type="radio" id="landlord" name="Account_Type__c" value="Landlord"> Landlord<br>
 
-            <!-- Transfer Fields -->
             <div id="transferFields" style="display:none;">
                 <label for="previousServiceStopDate">Previous Service Stop Date</label>
                 <input type="date" id="previousServiceStopDate" name="previousServiceStopDate"><br>
@@ -100,15 +89,18 @@
             <label for="additionalUserPhone">Additional Authorized User Phone</label>
             <input type="text" id="additionalUserPhone" name="additionalUserPhone"><br>
 
-            
             <div class="button-container">
                 <button type="button" onclick="previousStep()">Previous</button>
-                <button type="button" onclick="submitForm()">Next</button>
+                <button type="button" onclick="submitAndShowDocusignStep()">Next</button>
             </div>
         </div>
 
+        <div class="form-step" id="docusignStep" style="display:none;">
+            <div style="text-align: center; margin-top: 20px;">
+                <iframe id="docusignFrame" src="#" width="600" height="800" style="border: none;"></iframe>
+            </div>
+        </div>
 
-        
         <!-- Hidden Description Field -->
         <input type="hidden" id="description" name="description">
 
@@ -118,9 +110,8 @@
         <input type="hidden" name="Subject" value="Utility Service Application (Web Submission)">
 
         <input type="hidden" id="external" name="external" value="1"><br>
-
-        <!--div class="g-recaptcha" data-sitekey="6Lc07QsjAAAAAAHzhnTAnRBTY5Ndo1Vyn3WN5n7G"></div--><br>
     </form>
+
     <script src="script.js"></script>
 </body>
 </html>
