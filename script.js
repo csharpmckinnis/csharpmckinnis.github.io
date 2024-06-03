@@ -2,8 +2,6 @@ let currentStep = 0;
 let sameAsServiceChecked = '';
 let selectedAccountType = '';
 
-
-
 function showStep(step) {
     const steps = document.querySelectorAll('.form-step');
     steps.forEach((stepElement, index) => {
@@ -79,7 +77,7 @@ function updateDocusignLink() {
     const [year, month, day] = serviceStartDate.split('-');
     const formattedDate = `${month}/${day}/${year}`;
 
-    const docusignUrl = `https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=963a6232-6764-4580-b181-01fa4e7182b8&env=na3&acct=9bf19d04-f0ac-4eb6-bae4-1429d861f6a9&v=2&Citizen_UserName=${encodeURIComponent(firstName)}%20${encodeURIComponent(lastName)}&Citizen_Email=${encodeURIComponent(email)}&Primary Email Address=${encodeURIComponent(email)}&ServiceStartDate=${encodeURIComponent(formattedDate)}&ServiceAddress=${encodeURIComponent(serviceAddress)}&ServiceCity=${encodeURIComponent(serviceCity)}&ServiceZip=${encodeURIComponent(serviceZip)}&MailingAddress=${encodeURIComponent(mailAddress)}&MailingCity=${encodeURIComponent(mailCity)}&MailingState=${encodeURIComponent(mailState)}&MailingZip=${encodeURIComponent(mailZip)}&LastName=${encodeURIComponent(lastName)}&FirstName=${encodeURIComponent(firstName)}&Primary_Mobile_Phone=${encodeURIComponent(phone)}&Mailing Add Same=${sameAsServiceChecked}&Type of Account=${encodeURIComponent(selectedAccountType)}`;
+    const docusignUrl = `https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=963a6232-6764-4580-b181-01fa4e7182b8&env=na3&acct=9bf19d04-f0ac-4eb6-bae4-1429d861f6a9&v=2&Citizen_UserName=${encodeURIComponent(firstName)}%20${encodeURIComponent(lastName)}&Citizen_Email=${encodeURIComponent(email)}&Primary Email Address=${encodeURIComponent(email)}&ServiceStartDate=${encodeURIComponent(formattedDate)}&ServiceAddress=${encodeURIComponent(serviceAddress)}&ServiceCity=${encodeURIComponent(serviceCity)}&ServiceZip=${encodeURIComponent(serviceZip)}&MailingAddress=${encodeURIComponent(mailAddress)}&MailingCity=${encodeURIComponent(mailCity)}&MailingState=${encodeURIComponent(mailState)}&MailingZip=${encodeURIComponent(mailZip)}&LastName=${encodeURIComponent(lastName)}&FirstName=${encodeURIComponent(firstName)}&Primary_Mobile_Phone=${encodeURIComponent(phone)}&Mailing Add Same=${sameAsServiceChecked}&Type of Account=${encodeURIComponent(selectedAccountType)}&retURL=https://csharpmckinnis.github.io/completion.html`;
 
     document.getElementById('docusignFrame').src = docusignUrl;
 }
@@ -181,6 +179,17 @@ function submitFormWithAjax() {
         console.error('Error submitting form:', error);
     });
 }
+
+function showSuccessStep() {
+    document.getElementById('docusignStep').style.display = 'none';
+    document.getElementById('successStep').style.display = 'block';
+}
+
+window.addEventListener('hashchange', function() {
+    if (window.location.href.includes('completion.html')) {
+        showSuccessStep();
+    }
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     showStep(currentStep);
