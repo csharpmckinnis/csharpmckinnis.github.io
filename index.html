@@ -4,8 +4,10 @@
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
     <title>New Utility Service Application - Cary NC</title>
     <link rel="stylesheet" href="style.css">
+
 </head>
 <body>
+    <script src="script.js"></script>
     <img src="cary_logo.png" alt="Cary Logo" style="display: block; margin: 0 auto 20px; max-width: 150px;">
     <h1 style="text-align: center; color: #333;">Utility Service Application</h1>
     <form id="webToCaseForm" action="https://carync--prefried.sandbox.my.salesforce.com/servlet/servlet.WebToCase?encoding=UTF-8&orgId=00D020000004hFV" method="POST" onsubmit="return false;">
@@ -31,14 +33,11 @@
             <label for="serviceAddress" class="required">Service Address</label>
             <input type="text" id="serviceAddress" name="serviceAddress" required><br>
 
-            <label for="city">City</label>
-            <input type="text" id="city" name="city"><br>
+            <label for="city" class="required">City</label>
+            <input type="text" id="city" name="city" required><br>
 
-            <label for="state">State</label>
-            <input type="text" id="state" name="state"><br>
-
-            <label for="zip">Zip</label>
-            <input type="text" id="zip" name="zip"><br>
+            <label for="zip" class="required">Zip</label>
+            <input type="text" id="zip" name="zip" required><br>
             <div class="button-container">
                 <button type="button" onclick="nextStep()">Next</button>
             </div>
@@ -77,17 +76,8 @@
             <label for="mailingCity">City</label>
             <input type="text" id="mailingCity" name="mailingCity"><br>
 
-            <label for="mailingState">State</label>
-            <input type="text" id="mailingState" name="mailingState"><br>
-
             <label for="mailingZip">Zip</label>
             <input type="text" id="mailingZip" name="mailingZip"><br>
-
-            <label for="additionalUserName">Additional Authorized User Name</label>
-            <input type="text" id="additionalUserName" name="additionalUserName"><br>
-
-            <label for="additionalUserPhone">Additional Authorized User Phone</label>
-            <input type="text" id="additionalUserPhone" name="additionalUserPhone"><br>
 
             <div class="button-container">
                 <button type="button" onclick="previousStep()">Previous</button>
@@ -96,8 +86,8 @@
         </div>
 
         <div class="form-step" id="docusignStep" style="display:none;">
-            <div style="text-align: center; margin-top: 20px;">
-                <iframe id="docusignFrame" width="600" height="800" style="border: none;"></iframe>
+            <div style="text-align: center; margin-top: 20px;"></div>
+                <iframe id="docusignFrame" style="width: 100%; height: 500px; border: none;"></iframe>
             </div>
         </div>
 
@@ -110,7 +100,7 @@
 
 
         <!-- Hidden Description Field -->
-        <input type="hidden" id="description" name="description">
+        <input type="hidden" id="description" name="description" value="Ting Tong Test 1">
 
         <input type="hidden" name="Category__c" value="Utilities">
         <input type="hidden" name="Subcategory__c" value="Utility Accounts">
@@ -119,7 +109,5 @@
 
         <input type="hidden" id="external" name="external" value="1"><br>
     </form>
-
-    <script src="script.js"></script>
 </body>
 </html>
