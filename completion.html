@@ -31,19 +31,11 @@
             color: #333;
             margin-top: 0;
         }
-        button {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 20px;
-        }
-        button:hover {
-            background-color: #0056b3;
+        .close-message {
+            font-size: 120%;
+            font-weight: bold;
+            color: #007bff;
+            margin-top: 30px;
         }
     </style>
 </head>
@@ -52,7 +44,7 @@
         <h1>Thank you for your application</h1>
         <p>A copy has been emailed to you. Applications are processed on a rolling basis as they are received.</p>
         <p>Welcome to the Town of Cary!</p>
-        <button onclick="window.close()">Close page</button>
+        <p class="close-message">It is safe to close this tab now</p>
     </div>
 </body>
 </html>
