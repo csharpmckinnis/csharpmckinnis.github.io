@@ -2,6 +2,10 @@ let currentStep = 0;
 let sameAsServiceChecked = '';
 let selectedAccountType = '';
 
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('sameAsService').addEventListener('change', copyServiceAddress);
+});
+
 ///function monitorIframe() {
 ///    const iframe = document.getElementById('docusignFrame');
 ///    setInterval(function() {
@@ -55,15 +59,28 @@ function validateStep(step) {
 
 function copyServiceAddress() {
     console.log('running copyServiceAddress');
-    if (document.getElementById('sameAsService').checked) {
-        document.getElementById('mailingAddress').value = document.getElementById('serviceAddress').value;
-        document.getElementById('mailingCity').value = document.getElementById('city').value;
-        document.getElementById('mailingZip').value = document.getElementById('zip').value;
-        
+    
+    const serviceAddress = document.getElementById('serviceAddress');
+    const city = document.getElementById('city');
+    const zip = document.getElementById('zip');
+    const mailingAddress = document.getElementById('mailingAddress');
+    const mailingCity = document.getElementById('mailingCity');
+    const mailingZip = document.getElementById('mailingZip');
+    const sameAsService = document.getElementById('sameAsService');
+
+    if (!serviceAddress || !city || !zip || !mailingAddress || !mailingCity || !mailingZip || !sameAsService) {
+        console.error('One or more elements are missing in the DOM.');
+        return;
+    }
+
+    if (sameAsService.checked) {
+        mailingAddress.value = serviceAddress.value;
+        mailingCity.value = city.value;
+        mailingZip.value = zip.value;
     } else {
-        document.getElementById('mailingAddress').value = '';
-        document.getElementById('mailingCity').value = '';
-        document.getElementById('mailingZip').value = '';
+        mailingAddress.value = '';
+        mailingCity.value = '';
+        mailingZip.value = '';
     }
 }
 
