@@ -2,7 +2,23 @@ let currentStep = 0;
 let sameAsServiceChecked = '';
 let selectedAccountType = '';
 
+///function monitorIframe() {
+///    const iframe = document.getElementById('docusignFrame');
+///    setInterval(function() {
+///        try {
+///            const nextURL = iframe.contentWindow.location.href;
+///            if (nextURL.includes('carync.gov')) {
+///                showSuccessStep();
+///            }
+///        } catch (e) {
+///            // Handle the error if cross-origin access is not allowed
+///         console.error('Error accessing iframe content:', e);
+///        }
+///    }, 1000); // Check every second
+///}
+
 function showStep(step) {
+    console.log('running showStep');
     const steps = document.querySelectorAll('.form-step');
     steps.forEach((stepElement, index) => {
         stepElement.style.display = (index === step) ? 'block' : 'none';
@@ -10,6 +26,7 @@ function showStep(step) {
 }
 
 function nextStep() {
+    console.log('running nextStep');
     if (!validateStep(currentStep)) {
         alert("Please fill out all required fields.");
         return false;
@@ -19,11 +36,13 @@ function nextStep() {
 }
 
 function previousStep() {
+    console.log('running previousStep');
     currentStep--;
     showStep(currentStep);
 }
 
 function validateStep(step) {
+    console.log('running validateStep');
     const steps = document.querySelectorAll('.form-step');
     const inputs = steps[step].querySelectorAll('input[required], textarea[required]');
     for (let input of inputs) {
@@ -35,20 +54,21 @@ function validateStep(step) {
 }
 
 function copyServiceAddress() {
+    console.log('running copyServiceAddress');
     if (document.getElementById('sameAsService').checked) {
         document.getElementById('mailingAddress').value = document.getElementById('serviceAddress').value;
         document.getElementById('mailingCity').value = document.getElementById('city').value;
-        document.getElementById('mailingState').value = document.getElementById('state').value;
         document.getElementById('mailingZip').value = document.getElementById('zip').value;
+        
     } else {
         document.getElementById('mailingAddress').value = '';
         document.getElementById('mailingCity').value = '';
-        document.getElementById('mailingState').value = '';
         document.getElementById('mailingZip').value = '';
     }
 }
 
 function toggleTransferFields() {
+    console.log('running copyTransferFields');
     const transferFields = document.getElementById('transferFields');
     const transferCheckbox = document.getElementById('transferAccount');
     if (transferCheckbox.checked) {
@@ -59,40 +79,41 @@ function toggleTransferFields() {
 }
 
 function updateDocusignLink() {
+    console.log('running updateDocusignLink');
     const firstName = document.getElementById('firstName').value.trim();
     const lastName = document.getElementById('lastName').value.trim();
     const email = document.getElementById('email').value.trim();
     const phone = document.getElementById('phone').value.trim();
     const serviceAddress = document.getElementById('serviceAddress').value.trim();
     const serviceCity = document.getElementById('city').value.trim();
-    const serviceState = document.getElementById('state').value.trim();
     const serviceZip = document.getElementById('zip').value.trim();
     const serviceStartDate = document.getElementById('startServiceDate').value.trim();
     const mailAddress = document.getElementById('mailingAddress').value.trim();
     const mailCity = document.getElementById('mailingCity').value.trim();
-    const mailState = document.getElementById('mailingState').value.trim();
     const mailZip = document.getElementById('mailingZip').value.trim();
 
     // Reformat date from YYYY-MM-DD to MM/DD/YYYY
     const [year, month, day] = serviceStartDate.split('-');
     const formattedDate = `${month}/${day}/${year}`;
 
-    const docusignUrl = `https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=963a6232-6764-4580-b181-01fa4e7182b8&env=na3&acct=9bf19d04-f0ac-4eb6-bae4-1429d861f6a9&v=2&Citizen_UserName=${encodeURIComponent(firstName)}%20${encodeURIComponent(lastName)}&Citizen_Email=${encodeURIComponent(email)}&Primary Email Address=${encodeURIComponent(email)}&ServiceStartDate=${encodeURIComponent(formattedDate)}&ServiceAddress=${encodeURIComponent(serviceAddress)}&ServiceCity=${encodeURIComponent(serviceCity)}&ServiceZip=${encodeURIComponent(serviceZip)}&MailingAddress=${encodeURIComponent(mailAddress)}&MailingCity=${encodeURIComponent(mailCity)}&MailingState=${encodeURIComponent(mailState)}&MailingZip=${encodeURIComponent(mailZip)}&LastName=${encodeURIComponent(lastName)}&FirstName=${encodeURIComponent(firstName)}&Primary_Mobile_Phone=${encodeURIComponent(phone)}&Mailing Add Same=${sameAsServiceChecked}&Type of Account=${encodeURIComponent(selectedAccountType)}&retURL=https://csharpmckinnis.github.io/completion.html`;
+    const docusignUrl = `https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=963a6232-6764-4580-b181-01fa4e7182b8&env=na3&acct=9bf19d04-f0ac-4eb6-bae4-1429d861f6a9&v=2&Citizen_UserName=${encodeURIComponent(firstName)}%20${encodeURIComponent(lastName)}&Citizen_Email=${encodeURIComponent(email)}&Primary Email Address=${encodeURIComponent(email)}&ServiceStartDate=${encodeURIComponent(formattedDate)}&ServiceAddress=${encodeURIComponent(serviceAddress)}&ServiceCity=${encodeURIComponent(serviceCity)}&ServiceZip=${encodeURIComponent(serviceZip)}&MailingAddress=${encodeURIComponent(mailAddress)}&MailingCity=${encodeURIComponent(mailCity)}&MailingZip=${encodeURIComponent(mailZip)}&LastName=${encodeURIComponent(lastName)}&FirstName=${encodeURIComponent(firstName)}&Primary_Mobile_Phone=${encodeURIComponent(phone)}&Mailing Add Same=${sameAsServiceChecked}&Type of Account=${encodeURIComponent(selectedAccountType)}&retURL=https://na3.docusign.net`;
 
     document.getElementById('docusignFrame').src = docusignUrl;
+
+    console.log('DocuSign URL:', docusignUrl); // Log the URL for debugging
 }
 
-function updateAndSubmitForm() {
-    // Prevent form from submitting
-    event.preventDefault();
+function updateAndSubmitFormWithAjax() {
+    const form = document.getElementById('webToCaseForm');
+    const formData = new FormData(form);
 
+    // Get form data
     const firstName = document.getElementById('firstName').value.trim();
     const lastName = document.getElementById('lastName').value.trim();
     const email = document.getElementById('email').value.trim();
     const phone = document.getElementById('phone').value.trim() || 'None provided';
     const serviceAddress = document.getElementById('serviceAddress').value.trim();
     const city = document.getElementById('city').value.trim();
-    const state = document.getElementById('state').value.trim();
     const zip = document.getElementById('zip').value.trim();
     const startServiceDate = document.getElementById('startServiceDate').value.trim();
     const previousServiceStopDate = document.getElementById('previousServiceStopDate').value.trim() || 'None provided';
@@ -102,13 +123,10 @@ function updateAndSubmitForm() {
     const previousServiceZip = document.getElementById('previousServiceZip').value.trim() || '';
     const mailingAddress = document.getElementById('mailingAddress').value.trim() || 'None provided';
     const mailingCity = document.getElementById('mailingCity').value.trim() || 'None provided';
-    const mailingState = document.getElementById('mailingState').value.trim() || 'None provided';
     const mailingZip = document.getElementById('mailingZip').value.trim() || 'None provided';
-    const additionalUserName = document.getElementById('additionalUserName').value.trim() || 'None provided';
-    const additionalUserPhone = document.getElementById('additionalUserPhone').value.trim() || '';
     const accountType = selectedAccountType;
 
-    if (!firstName || !lastName || !email || !serviceAddress || !startServiceDate) {
+    if (!firstName || !lastName || !email || !serviceAddress || !startServiceDate || !city || !zip) {
         alert("Please fill out all required fields.");
         return false;
     }
@@ -118,54 +136,16 @@ function updateAndSubmitForm() {
         return false;
     }
 
-    //generate name field
-    const name = '${firstName} ${lastName}'
+    // Create name and description
+    const name = `${firstName} ${lastName}`;
+    const description = 'bing bong ting tong';
 
-    const description = `
-        Requested Service Start Date: ${startServiceDate}
-        Service Account Type: ${accountType}
-        Name: ${name}
-        Email: ${email}
-        Phone: ${phone}
-        Service Address: ${serviceAddress}, ${city}, ${state} ${zip}
-        Stop Service Date: ${previousServiceStopDate}
-        Previous Service Address: ${previousServiceAddress}, ${previousServiceCity}, ${previousServiceState} ${previousServiceZip}
-        Mailing Address: ${mailingAddress}, ${mailingCity}, ${mailingState} ${mailingZip}
-        Additional Authorized User: ${additionalUserName} (${additionalUserPhone})
-    `;
-
-    
-
-    document.getElementById('description').value = description.trim();
+    // Set hidden fields
+    document.getElementById('description').value = description;
+    formData.append('description', description);
+    formData.append('name', name);
 
     // Submit the form data to Salesforce
-    document.getElementById('webToCaseForm').submit();
-
-    // Update the DocuSign link
-    updateDocusignLink();
-}
-
-function submitAndShowDocusignStep() {
-    // Prevent default form submission behavior
-    event.preventDefault();
-
-    // Submit the form data to Salesforce using AJAX
-    submitFormWithAjax();
-}
-
-function showDocusignStep() {
-    // Update the DocuSign iframe URL
-    updateDocusignLink();
-
-    // Show the DocuSign step
-    currentStep = 2; // Set current step to the third step
-    showStep(currentStep); // Show the third step
-}
-
-function submitFormWithAjax() {
-    const form = document.getElementById('webToCaseForm');
-    const formData = new FormData(form);
-    
     fetch(form.action, {
         method: 'POST',
         body: formData,
@@ -178,18 +158,108 @@ function submitFormWithAjax() {
     .catch(error => {
         console.error('Error submitting form:', error);
     });
+
+    // Update the DocuSign link
+    updateDocusignLink();
+}
+function updateAndSubmitFormWithAjax() {
+    const form = document.getElementById('webToCaseForm');
+    const formData = new FormData(form);
+
+    // Get form data
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim() || 'None provided';
+    const serviceAddress = document.getElementById('serviceAddress').value.trim();
+    const city = document.getElementById('city').value.trim();
+    const zip = document.getElementById('zip').value.trim();
+    const startServiceDate = document.getElementById('startServiceDate').value.trim();
+    const previousServiceStopDate = document.getElementById('previousServiceStopDate').value.trim();
+    const previousServiceAddress = document.getElementById('previousServiceAddress').value.trim();
+    const previousServiceCity = document.getElementById('previousServiceCity').value.trim();
+    const previousServiceState = document.getElementById('previousServiceState').value.trim();
+    const previousServiceZip = document.getElementById('previousServiceZip').value.trim();
+    const mailingAddress = document.getElementById('mailingAddress').value.trim() || 'None provided';
+    const mailingCity = document.getElementById('mailingCity').value.trim() || 'None provided';
+    const mailingZip = document.getElementById('mailingZip').value.trim() || 'None provided';
+    const accountType = selectedAccountType;
+
+    if (!firstName || !lastName || !email || !serviceAddress || !startServiceDate) {
+        alert("Please fill out all required fields.");
+        return false;
+    }
+
+    if (!validateStep(currentStep)) {
+        alert("Please fill out all required fields.");
+        return false;
+    }
+
+    // Create a detailed description
+    let description = `
+        Name: ${firstName} ${lastName}
+        Email: ${email}
+        Phone: ${phone}
+        Service Address: ${serviceAddress}, ${city} ${zip}
+        Service Start Date: ${startServiceDate}
+        Mailing Address: ${mailingAddress}, ${mailingCity} ${mailingZip}
+        Account Type: ${accountType}
+    `;
+
+    if (previousServiceStopDate || previousServiceAddress || previousServiceCity || previousServiceState || previousServiceZip) {
+        description += `
+        Previous Service Information:
+        Stop Date: ${previousServiceStopDate || 'N/A'}
+        Address: ${previousServiceAddress || 'N/A'}, ${previousServiceCity || 'N/A'}, ${previousServiceState || 'N/A'}, ${previousServiceZip || 'N/A'}
+        `;
+    }
+
+    // Set hidden fields
+    document.getElementById('description').value = description.trim();
+    formData.append('description', description.trim());
+
+    // Submit the form data to Salesforce
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        mode: 'no-cors' // This is important to avoid CORS issues
+    })
+    .then(response => {
+        console.log('Form successfully submitted');
+        showDocusignStep(); // Proceed to show DocuSign step
+    })
+    .catch(error => {
+        console.error('Error submitting form:', error);
+    });
+
+    // Update the DocuSign link
+    updateDocusignLink();
 }
 
+function submitAndShowDocusignStep(event) {
+    console.log('running submitAndShowDocusignStep');
+    // Prevent default form submission behavior
+    // Submit the form data to Salesforce using AJAX
+    updateAndSubmitFormWithAjax();
+}
+
+function showDocusignStep() {
+    console.log('running showDocusignStep');
+    // Update the DocuSign iframe URL
+    updateDocusignLink();
+
+    // Show the DocuSign step
+    currentStep = 2; // Set current step to the third step
+    showStep(currentStep); // Show the third step
+}
+
+
+
 function showSuccessStep() {
+    console.log('running showSuccessStep');
     document.getElementById('docusignStep').style.display = 'none';
     document.getElementById('successStep').style.display = 'block';
 }
-
-window.addEventListener('hashchange', function() {
-    if (window.location.href.includes('completion.html')) {
-        showSuccessStep();
-    }
-});
 
 document.addEventListener('DOMContentLoaded', () => {
     showStep(currentStep);
