@@ -1,6 +1,7 @@
 body {
     font-family: 'Lucida Sans Unicode', sans-serif;
     margin: 20px;
+    background-color: #003e7a;
 }
 form {
     max-width: 600px;

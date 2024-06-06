@@ -113,14 +113,15 @@ function toggleTransferFields() {
 function toggleCommercialFields() {
     console.log('running toggleCommercialFields');
     const commercialFields = document.getElementById('commercialFields');
+    const transferFields = document.getElementById('transferFields');
     const commercialCheckbox = document.getElementById('commercial');
     if (commercialCheckbox.checked) {
         commercialFields.style.display = 'block';
+        transferFields.style.display = 'none';
     } else {
         commercialFields.style.display = 'none';
     }
 }
-
 
 function updateDocusignLink() {
     console.log('running updateDocusignLink');
@@ -310,20 +311,28 @@ document.addEventListener('DOMContentLoaded', () => {
     
     document.getElementById('sameAsService').addEventListener('change', function() {
         sameAsServiceChecked = 'x';
+        toggleCommercialFields();
     });
 
     document.getElementById('newCustomer').addEventListener('change', function() {
         selectedAccountType = this.checked ? 'New Customer' : '';
         toggleTransferFields(); // Ensure fields are toggled when switching between radio buttons
+        toggleCommercialFields();
     });
 
     document.getElementById('transferAccount').addEventListener('change', function() {
         selectedAccountType = this.checked ? 'Transfer from Previous Town of Cary Account' : '';
         toggleTransferFields(); // Ensure fields are toggled when switching between radio buttons
+        toggleCommercialFields();
     });
 
     document.getElementById('landlord').addEventListener('change', function() {
         selectedAccountType = this.checked ? 'Landlord' : '';
         toggleTransferFields(); // Ensure fields are toggled when switching between radio buttons
+        toggleCommercialFields();
+    });
+    document.getElementById('commercial').addEventListener('change', function() {
+        selectedAccountType = this.checked ? 'Commercial' : '';
+        toggleTransferFields();
     });
 });
