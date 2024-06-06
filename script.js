@@ -54,6 +54,21 @@ function validateStep(step) {
             return false;
         }
     }
+    // Check if at least one radio button is selected
+    if (step === 0) { // Assuming the radio buttons are in the first step
+        const radioButtons = document.querySelectorAll('input[name="Account_Type__c"]');
+        let isChecked = false;
+        for (let radioButton of radioButtons) {
+            if (radioButton.checked) {
+                isChecked = true;
+                break;
+            }
+        }
+        if (!isChecked) {
+            alert("Please select an account type.");
+            return false;
+        }
+    }
     return true;
 }
 
@@ -94,6 +109,18 @@ function toggleTransferFields() {
         transferFields.style.display = 'none';
     }
 }
+
+function toggleCommercialFields() {
+    console.log('running toggleCommercialFields');
+    const commercialFields = document.getElementById('commercialFields');
+    const commercialCheckbox = document.getElementById('commercial');
+    if (commercialCheckbox.checked) {
+        commercialFields.style.display = 'block';
+    } else {
+        commercialFields.style.display = 'none';
+    }
+}
+
 
 function updateDocusignLink() {
     console.log('running updateDocusignLink');
