@@ -18,6 +18,16 @@
             <label for="startServiceDate" class="required">Start Service Date</label>
             <input type="date" id="startServiceDate" name="startServiceDate" required><br>
 
+            <label class="required">Account Type</label>
+            <input type="radio" id="newCustomer" name="Account_Type__c" value="New Customer"> New Customer<br>
+            <input type="radio" id="transferAccount" name="Account_Type__c" value="Transfer from Previous Town of Cary Account" onclick="toggleTransferFields()"> Transfer from Previous Town of Cary Account<br>
+            <input type="radio" id="commercial" name="Account_Type__c" value="Commercial" onclick="toggleCommercialFields()"> Commercial<br>
+            <input type="radio" id="landlord" name="Account_Type__c" value="Landlord"> Landlord<br>
+
+            <div id="commercialFields" style="display:none;">
+                <p>Please note, the unique elements of a commercial service application have not yet been included in this form. Please continue to submit this form and be aware that Cary 311 or Utility Accounts staff will contact the primary applicant for any additional information that is needed. We apologize for the inconvenience.</p>
+            </div>
+
             <label for="firstName" class="required">First Name</label>
             <input id="firstName" maxlength="40" name="firstName" size="20" type="text" required><br>
 
@@ -44,10 +54,6 @@
         </div>
 
         <div class="form-step">
-            <label>Account Type</label>
-            <input type="radio" id="newCustomer" name="Account_Type__c" value="New Customer"> New Customer<br>
-            <input type="radio" id="transferAccount" name="Account_Type__c" value="Transfer from Previous Town of Cary Account" onclick="toggleTransferFields()"> Transfer from Previous Town of Cary Account<br>
-            <input type="radio" id="landlord" name="Account_Type__c" value="Landlord"> Landlord<br>
 
             <div id="transferFields" style="display:none;">
                 <label for="previousServiceStopDate">Previous Service Stop Date</label>
