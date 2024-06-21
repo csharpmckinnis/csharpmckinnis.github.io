@@ -15,6 +15,7 @@
         <input type="hidden" name="retURL" value="http://">
 
         <div class="form-step form-step-active">
+            <h2>Service Application Info</h2>
             <label for="startServiceDate" class="required">Start Service Date</label>
             <input type="date" id="startServiceDate" name="startServiceDate" required><br>
 
@@ -54,37 +55,47 @@
         </div>
 
         <div class="form-step">
-
             <div id="transferFields" style="display:none;">
+                <h2>Transferring Service: Previous Account Info</h2>
                 <label for="previousServiceStopDate">Previous Service Stop Date</label>
                 <input type="date" id="previousServiceStopDate" name="previousServiceStopDate"><br>
-
+        
                 <label for="previousServiceAddress">Previous Utility Service Address</label>
                 <input type="text" id="previousServiceAddress" name="previousServiceAddress"><br>
-
+        
                 <label for="previousServiceCity">Previous Service City</label>
                 <input type="text" id="previousServiceCity" name="previousServiceCity"><br>
-
+        
                 <label for="previousServiceState">Previous Service State</label>
                 <input type="text" id="previousServiceState" name="previousServiceState"><br>
-
+        
                 <label for="previousServiceZip">Previous Service Zip</label>
                 <input type="text" id="previousServiceZip" name="previousServiceZip"><br>
+                <br>
             </div>
-
+            <div id="secondaryAccountFields">
+                <h2>Secondary Account Owner</h2>
+                <label for="secondaryAccountOwnerName" class="required">Name</label>
+                <input type="text" id="secondaryAccountOwnerName" name="secondaryAccountOwnerName" required><br>
+                <label for="secondaryAccountOwnerPhone" class="required">Phone</label>
+                <input type="text" id="secondaryAccountOwnerPhone" name="secondaryAccountOwnerPhone" required><br>
+            </div>
+            <br>
+            <h2>Mailing Info</h2>
+        
             <label>
                 <input type="checkbox" id="sameAsService" name="sameAsService" onclick="copyServiceAddress()"> Mailing Address is same as Service Address
             </label><br>
-
+        
             <label for="mailingAddress">Mailing Address</label>
             <input type="text" id="mailingAddress" name="mailingAddress"><br>
-
+        
             <label for="mailingCity">City</label>
             <input type="text" id="mailingCity" name="mailingCity"><br>
-
+        
             <label for="mailingZip">Zip</label>
             <input type="text" id="mailingZip" name="mailingZip"><br>
-
+        
             <div class="button-container">
                 <button type="button" onclick="previousStep()">Previous</button>
                 <button type="button" onclick="submitAndShowDocusignStep()">Next</button>
@@ -112,6 +123,8 @@
         <input type="hidden" name="Subcategory__c" value="Utility Accounts">
         <input type="hidden" name="Scenario__c" value="Start/Stop Service">
         <input type="hidden" name="Subject" value="Utility Service Application (Web Submission)">
+        <input type="hidden" id="SuppliedName" name="first_name">
+
 
         <input type="hidden" id="external" name="external" value="1"><br>
     </form>

@@ -136,21 +136,24 @@ function updateDocusignLink() {
     const mailAddress = document.getElementById('mailingAddress').value.trim();
     const mailCity = document.getElementById('mailingCity').value.trim();
     const mailZip = document.getElementById('mailingZip').value.trim();
-
+    const secondaryAccountOwnerName = document.getElementById('secondaryAccountOwnerName').value.trim();
+    const secondaryAccountOwnerPhone = document.getElementById('secondaryAccountOwnerPhone').value.trim();
     // Reformat date from YYYY-MM-DD to MM/DD/YYYY
     const [year, month, day] = serviceStartDate.split('-');
     const formattedDate = `${month}/${day}/${year}`;
 
-    const docusignUrl = `https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=5ab5c7ec-4758-433a-8b5f-94e34a098426&env=na3&acct=9bf19d04-f0ac-4eb6-bae4-1429d861f6a9&v=2&Citizen_UserName=${encodeURIComponent(firstName)}%20${encodeURIComponent(lastName)}&Citizen_Email=${encodeURIComponent(email)}&Primary Email Address=${encodeURIComponent(email)}&ServiceStartDate=${encodeURIComponent(formattedDate)}&ServiceAddress=${encodeURIComponent(serviceAddress)}&ServiceCity=${encodeURIComponent(serviceCity)}&ServiceZip=${encodeURIComponent(serviceZip)}&MailingAddress=${encodeURIComponent(mailAddress)}&MailingCity=${encodeURIComponent(mailCity)}&MailingZip=${encodeURIComponent(mailZip)}&LastName=${encodeURIComponent(lastName)}&FirstName=${encodeURIComponent(firstName)}&Primary_Mobile_Phone=${encodeURIComponent(phone)}&Mailing Add Same=${sameAsServiceChecked}&Type of Account=${encodeURIComponent(selectedAccountType)}&retURL=https://na3.docusign.net`;
+    const docusignUrl = `https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=5ab5c7ec-4758-433a-8b5f-94e34a098426&env=na3&acct=9bf19d04-f0ac-4eb6-bae4-1429d861f6a9&v=2&Citizen_UserName=${encodeURIComponent(firstName)}%20${encodeURIComponent(lastName)}&Citizen_Email=${encodeURIComponent(email)}&Primary Email Address=${encodeURIComponent(email)}&ServiceStartDate=${encodeURIComponent(formattedDate)}&ServiceAddress=${encodeURIComponent(serviceAddress)}&ServiceCity=${encodeURIComponent(serviceCity)}&ServiceZip=${encodeURIComponent(serviceZip)}&MailingAddress=${encodeURIComponent(mailAddress)}&MailingCity=${encodeURIComponent(mailCity)}&MailingZip=${encodeURIComponent(mailZip)}&LastName=${encodeURIComponent(lastName)}&FirstName=${encodeURIComponent(firstName)}&Primary_Mobile_Phone=${encodeURIComponent(phone)}&Mailing Add Same=${sameAsServiceChecked}&Type of Account=${encodeURIComponent(selectedAccountType)}&SecondaryAccountOwnerName=${encodeURIComponent(secondaryAccountOwnerName)}&SecondaryAccountOwnerPhone=${encodeURIComponent(secondaryAccountOwnerPhone)}&retURL=https://na3.docusign.net`;
     
     document.getElementById('docusignFrame').src = docusignUrl;
 
-    console.log('DocuSign URL:', docusignUrl); // Log the URL for debugging
+    
 }
 
 function updateAndSubmitFormWithAjax() {
     const form = document.getElementById('webToCaseForm');
-    const formData = new FormData(form);
+    const formData = new FormData(
+
+    );
 
     // Get form data
     const firstName = document.getElementById('firstName').value.trim();
@@ -208,6 +211,7 @@ function updateAndSubmitFormWithAjax() {
     updateDocusignLink();
 }
 function updateAndSubmitFormWithAjax() {
+    console.log('running updateAndSubmitFormWithAjax')
     const form = document.getElementById('webToCaseForm');
     const formData = new FormData(form);
 
@@ -230,6 +234,10 @@ function updateAndSubmitFormWithAjax() {
     const mailingZip = document.getElementById('mailingZip').value.trim() || 'None provided';
     const accountType = selectedAccountType;
 
+    //secondary account owner info
+    const secondaryAccountOwnerName = document.getElementById('secondaryAccountOwnerName').value.trim() || 'None provided';
+    const secondaryAccountOwnerPhone = document.getElementById('secondaryAccountOwnerPhone').value.trim() || 'None provided';
+
     if (!firstName || !lastName || !email || !serviceAddress || !startServiceDate) {
         alert("Please fill out all required fields.");
         return false;
@@ -240,9 +248,11 @@ function updateAndSubmitFormWithAjax() {
         return false;
     }
 
+    // Create name and description
+    let name = `${firstName} ${lastName}`;
     // Create a detailed description
     let description = `
-        Name: ${firstName} ${lastName}
+        Name: ${name}
         Email: ${email}
         Phone: ${phone}
         Service Address: ${serviceAddress}, ${city} ${zip}
@@ -259,9 +269,18 @@ function updateAndSubmitFormWithAjax() {
         `;
     }
 
+    // Append Secondary Account Owner Info
+    description += `
+        Secondary Account Owner:
+        Name: ${secondaryAccountOwnerName}
+        Phone: ${secondaryAccountOwnerPhone}
+    `;
+
     // Set hidden fields
-    document.getElementById('description').value = description.trim();
-    formData.append('description', description.trim());
+    document.getElementById('description').value = description;
+    formData.append('description', description);
+    document.getElementById('SuppliedName').value = name;
+    formData.append('name', name);
 
     // Submit the form data to Salesforce
     fetch(form.action, {
