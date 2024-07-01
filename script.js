@@ -136,13 +136,21 @@ function updateDocusignLink() {
     const mailAddress = document.getElementById('mailingAddress').value.trim();
     const mailCity = document.getElementById('mailingCity').value.trim();
     const mailZip = document.getElementById('mailingZip').value.trim();
-    const secondaryAccountOwnerName = document.getElementById('secondaryAccountOwnerName').value.trim();
-    const secondaryAccountOwnerPhone = document.getElementById('secondaryAccountOwnerPhone').value.trim();
+    const billingContactFirstName = document.getElementById('billingContactFirstName').value.trim();
+    const billingContactLastName = document.getElementById('billingContactLastName').value.trim();
+    const billingContactPhone = document.getElementById('billingContactPhone').value.trim();
     // Reformat date from YYYY-MM-DD to MM/DD/YYYY
     const [year, month, day] = serviceStartDate.split('-');
     const formattedDate = `${month}/${day}/${year}`;
+    // Get Business Information
+    const businessName = document.getElementById('businessName') ? document.getElementById('businessName').value.trim() : '';
+    const federalTaxId = document.getElementById('federalTaxId') ? document.getElementById('federalTaxId').value.trim() : '';
+    const businessPhone = document.getElementById('businessPhone') ? document.getElementById('businessPhone').value.trim() : '';
 
-    const docusignUrl = `https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=5ab5c7ec-4758-433a-8b5f-94e34a098426&env=na3&acct=9bf19d04-f0ac-4eb6-bae4-1429d861f6a9&v=2&Citizen_UserName=${encodeURIComponent(firstName)}%20${encodeURIComponent(lastName)}&Citizen_Email=${encodeURIComponent(email)}&Primary Email Address=${encodeURIComponent(email)}&ServiceStartDate=${encodeURIComponent(formattedDate)}&ServiceAddress=${encodeURIComponent(serviceAddress)}&ServiceCity=${encodeURIComponent(serviceCity)}&ServiceZip=${encodeURIComponent(serviceZip)}&MailingAddress=${encodeURIComponent(mailAddress)}&MailingCity=${encodeURIComponent(mailCity)}&MailingZip=${encodeURIComponent(mailZip)}&LastName=${encodeURIComponent(lastName)}&FirstName=${encodeURIComponent(firstName)}&Primary_Mobile_Phone=${encodeURIComponent(phone)}&Mailing Add Same=${sameAsServiceChecked}&Type of Account=${encodeURIComponent(selectedAccountType)}&SecondaryAccountOwnerName=${encodeURIComponent(secondaryAccountOwnerName)}&SecondaryAccountOwnerPhone=${encodeURIComponent(secondaryAccountOwnerPhone)}&retURL=https://na3.docusign.net`;
+    // Placeholder value
+    const placeholder = 'Not Provided';
+    
+    const docusignUrl = `https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=90ea2e80-71a5-4833-8e3d-8e9fc3d7e242&env=na3&acct=9bf19d04-f0ac-4eb6-bae4-1429d861f6a9&v=2&Citizen_UserName=${encodeURIComponent(firstName)}%20${encodeURIComponent(lastName)}&Citizen_Email=${encodeURIComponent(email)}&Primary Email Address=${encodeURIComponent(email)}&ServiceStartDate=${encodeURIComponent(formattedDate)}&ServiceAddress=${encodeURIComponent(serviceAddress)}&ServiceCity=${encodeURIComponent(serviceCity)}&ServiceZip=${encodeURIComponent(serviceZip)}&MailingAddress=${encodeURIComponent(mailAddress)}&MailingCity=${encodeURIComponent(mailCity)}&MailingZip=${encodeURIComponent(mailZip)}&LastName=${encodeURIComponent(lastName)}&FirstName=${encodeURIComponent(firstName)}&Primary_Mobile_Phone=${encodeURIComponent(phone)}&Mailing Add Same=${sameAsServiceChecked}&Type of Account=${encodeURIComponent(selectedAccountType)}&SecondaryAccountOwnerName=${encodeURIComponent(billingContactFirstName)}%20${encodeURIComponent(billingContactLastName)}&SecondaryAccountOwnerPhone=${encodeURIComponent(billingContactPhone)}&EnvelopeField_BusinessName=${encodeURIComponent(businessName || placeholder)}&EnvelopeField_BusinessTIN=${encodeURIComponent(federalTaxId || placeholder)}&EnvelopeField_BusinessPhone=${encodeURIComponent(businessPhone || placeholder)}&retURL=https://na3.docusign.net`;
     
     document.getElementById('docusignFrame').src = docusignUrl;
 
@@ -150,68 +158,7 @@ function updateDocusignLink() {
 }
 
 function updateAndSubmitFormWithAjax() {
-    const form = document.getElementById('webToCaseForm');
-    const formData = new FormData(
-
-    );
-
-    // Get form data
-    const firstName = document.getElementById('firstName').value.trim();
-    const lastName = document.getElementById('lastName').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const phone = document.getElementById('phone').value.trim() || 'None provided';
-    const serviceAddress = document.getElementById('serviceAddress').value.trim();
-    const city = document.getElementById('city').value.trim();
-    const zip = document.getElementById('zip').value.trim();
-    const startServiceDate = document.getElementById('startServiceDate').value.trim();
-    const previousServiceStopDate = document.getElementById('previousServiceStopDate').value.trim() || 'None provided';
-    const previousServiceAddress = document.getElementById('previousServiceAddress').value.trim() || '';
-    const previousServiceCity = document.getElementById('previousServiceCity').value.trim() || '';
-    const previousServiceState = document.getElementById('previousServiceState').value.trim() || '';
-    const previousServiceZip = document.getElementById('previousServiceZip').value.trim() || '';
-    const mailingAddress = document.getElementById('mailingAddress').value.trim() || 'None provided';
-    const mailingCity = document.getElementById('mailingCity').value.trim() || 'None provided';
-    const mailingZip = document.getElementById('mailingZip').value.trim() || 'None provided';
-    const accountType = selectedAccountType;
-
-    if (!firstName || !lastName || !email || !serviceAddress || !startServiceDate || !city || !zip) {
-        alert("Please fill out all required fields.");
-        return false;
-    }
-
-    if (!validateStep(currentStep)) {
-        alert("Please fill out all required fields.");
-        return false;
-    }
-
-    // Create name and description
-    const name = `${firstName} ${lastName}`;
-    const description = 'bing bong ting tong';
-
-    // Set hidden fields
-    document.getElementById('description').value = description;
-    formData.append('description', description);
-    formData.append('name', name);
-
-    // Submit the form data to Salesforce
-    fetch(form.action, {
-        method: 'POST',
-        body: formData,
-        mode: 'no-cors' // This is important to avoid CORS issues
-    })
-    .then(response => {
-        console.log('Form successfully submitted');
-        showDocusignStep(); // Proceed to show DocuSign step
-    })
-    .catch(error => {
-        console.error('Error submitting form:', error);
-    });
-
-    // Update the DocuSign link
-    updateDocusignLink();
-}
-function updateAndSubmitFormWithAjax() {
-    console.log('running updateAndSubmitFormWithAjax')
+    console.log('running updateAndSubmitFormWithAjax');
     const form = document.getElementById('webToCaseForm');
     const formData = new FormData(form);
 
@@ -224,21 +171,25 @@ function updateAndSubmitFormWithAjax() {
     const city = document.getElementById('city').value.trim();
     const zip = document.getElementById('zip').value.trim();
     const startServiceDate = document.getElementById('startServiceDate').value.trim();
-    const previousServiceStopDate = document.getElementById('previousServiceStopDate').value.trim();
-    const previousServiceAddress = document.getElementById('previousServiceAddress').value.trim();
-    const previousServiceCity = document.getElementById('previousServiceCity').value.trim();
-    const previousServiceState = document.getElementById('previousServiceState').value.trim();
-    const previousServiceZip = document.getElementById('previousServiceZip').value.trim();
     const mailingAddress = document.getElementById('mailingAddress').value.trim() || 'None provided';
     const mailingCity = document.getElementById('mailingCity').value.trim() || 'None provided';
     const mailingZip = document.getElementById('mailingZip').value.trim() || 'None provided';
     const accountType = selectedAccountType;
 
-    //secondary account owner info
-    const secondaryAccountOwnerName = document.getElementById('secondaryAccountOwnerName').value.trim() || 'None provided';
-    const secondaryAccountOwnerPhone = document.getElementById('secondaryAccountOwnerPhone').value.trim() || 'None provided';
+    // Secondary contact fields
+    const billingContactFirstName = document.getElementById('billingContactFirstName').value.trim();
+    const billingContactLastName = document.getElementById('billingContactLastName').value.trim();
+    const billingContactEmail = document.getElementById('billingContactEmail').value.trim();
+    const billingContactPhone = document.getElementById('billingContactPhone').value.trim() || 'None provided';
+    const billingCompanyName = document.getElementById('billingCompanyName') ? document.getElementById('billingCompanyName').value.trim() : '';
 
-    if (!firstName || !lastName || !email || !serviceAddress || !startServiceDate) {
+    // Commercial fields
+    const businessName = document.getElementById('businessName') ? document.getElementById('businessName').value.trim() : '';
+    const federalTaxId = document.getElementById('federalTaxId') ? document.getElementById('federalTaxId').value.trim() : '';
+    const businessPhone = document.getElementById('businessPhone') ? document.getElementById('businessPhone').value.trim() : '';
+
+    // Validate required fields
+    if (!firstName || !lastName || !email || !serviceAddress || !startServiceDate || !city || !zip || !billingContactFirstName || !billingContactLastName || !billingContactEmail) {
         alert("Please fill out all required fields.");
         return false;
     }
@@ -248,9 +199,8 @@ function updateAndSubmitFormWithAjax() {
         return false;
     }
 
-    // Create name and description
+    // Create name and description and subject
     let name = `${firstName} ${lastName}`;
-    // Create a detailed description
     let description = `
         Name: ${name}
         Email: ${email}
@@ -259,24 +209,24 @@ function updateAndSubmitFormWithAjax() {
         Service Start Date: ${startServiceDate}
         Mailing Address: ${mailingAddress}, ${mailingCity} ${mailingZip}
         Account Type: ${accountType}
+        
+        Secondary Contact:
+        Name: ${billingContactFirstName} ${billingContactLastName}
+        Email: ${billingContactEmail}
+        Phone: ${billingContactPhone}
+        Company Name: ${billingCompanyName}
     `;
 
-    if (previousServiceStopDate || previousServiceAddress || previousServiceCity || previousServiceState || previousServiceZip) {
+    // Add commercial fields to description if applicable
+    if (accountType === 'Commercial') {
         description += `
-        Previous Service Information:
-        Stop Date: ${previousServiceStopDate || 'N/A'}
-        Address: ${previousServiceAddress || 'N/A'}, ${previousServiceCity || 'N/A'}, ${previousServiceState || 'N/A'}, ${previousServiceZip || 'N/A'}
+            Business Name: ${businessName}
+            Federal Tax ID: ${federalTaxId}
+            Business Phone: ${businessPhone}
         `;
     }
 
-    // Append Secondary Account Owner Info
-    description += `
-        Secondary Account Owner:
-        Name: ${secondaryAccountOwnerName}
-        Phone: ${secondaryAccountOwnerPhone}
-    `;
-
-    // Set hidden fields
+    // Set hidden fields, Description, SuppliedName
     document.getElementById('description').value = description;
     formData.append('description', description);
     document.getElementById('SuppliedName').value = name;

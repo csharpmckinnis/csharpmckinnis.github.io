@@ -4,7 +4,6 @@
     <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
     <title>New Utility Service Application - Cary NC</title>
     <link rel="stylesheet" href="style.css">
-
 </head>
 <body>
     <script src="script.js"></script>
@@ -15,20 +14,22 @@
         <input type="hidden" name="retURL" value="http://">
 
         <div class="form-step form-step-active">
-            <h2>Service Application Info</h2>
+            <h2>Getting Started</h2>
             <label for="startServiceDate" class="required">Start Service Date</label>
             <input type="date" id="startServiceDate" name="startServiceDate" required><br>
+            
+            <label for="serviceAddress" class="required">Service Address</label>
+            <input type="text" id="serviceAddress" name="serviceAddress" required><br>
 
-            <label class="required">Account Type</label>
-            <input type="radio" id="newCustomer" name="Account_Type__c" value="New Customer"> New Customer<br>
-            <input type="radio" id="transferAccount" name="Account_Type__c" value="Transfer from Previous Town of Cary Account" onclick="toggleTransferFields()"> Transfer from Previous Town of Cary Account<br>
-            <input type="radio" id="commercial" name="Account_Type__c" value="Commercial" onclick="toggleCommercialFields()"> Commercial<br>
-            <input type="radio" id="landlord" name="Account_Type__c" value="Landlord"> Landlord<br><br>
+            <label for="city" class="required">City</label>
+            <input type="text" id="city" name="city" required><br>
 
-            <div id="commercialFields" style="display:none;">
-                <p>Please note, the unique elements of a commercial service application have not yet been included in this form. Please continue to submit this form and be aware that Cary 311 or Utility Accounts staff will contact the primary applicant for any additional information that is needed. We apologize for the inconvenience.</p>
-            </div>
+            <label for="zip" class="required">Zip</label>
+            <input type="text" id="zip" name="zip" required><br>
 
+            <h3>Primary Contact (Authorized Account Owner)</h3>
+            <body>This will be the name associated with the utility account. For commercial applicants, the company name will also be related.</body>
+            <br><br>
             <label for="firstName" class="required">First Name</label>
             <input id="firstName" maxlength="40" name="firstName" size="20" type="text" required><br>
 
@@ -41,14 +42,58 @@
             <label for="phone">Phone</label>
             <input id="phone" maxlength="40" name="Supplied_Phone__c" size="20" type="text"><br>
 
-            <label for="serviceAddress" class="required">Service Address</label>
-            <input type="text" id="serviceAddress" name="serviceAddress" required><br>
+            <h3>Secondary Contact</h3>
+            <body>This is another user able to access and make changes to the utility account. For commercial applicants, we recommend a billing contact.</body>
+            <br><br>
+            <label for="billingContactFirstName" class="required">First Name</label>
+            <input id="billingContactFirstName" maxlength="40" name="billingContactFirstName" size="20" type="text" required><br>
+            <label for="billingContactLastName" class="required">Last Name</label>
+            <input id="billingContactLastName" maxlength="40" name="billingContactLastName" size="20" type="text" required><br>
+            <label for="billingContactEmail" class="required">Email</label>
+            <input id="billingContactEmail" maxlength="80" name="billingContactEmail" size="20" type="email" required><br>
+            <label for="billingContactPhone">Phone</label>
+            <input id="billingContactPhone" maxlength="40" name="billingContactPhone" size="20" type="text"><br>
+            <label for="billingCompanyName">If Third-Party: Company Name</label>
+            <input type="text" id="billingCompanyName" name="billingCompanyName"><br>
 
-            <label for="city" class="required">City</label>
-            <input type="text" id="city" name="city" required><br>
+            <label class="required">Account Type</label>
+            <input type="radio" id="newCustomer" name="Account_Type__c" value="New Customer"> New Customer<br>
+            <input type="radio" id="transferAccount" name="Account_Type__c" value="Transfer from Previous Town of Cary Account" onclick="toggleTransferFields()"> Transfer from Previous Town of Cary Account<br>
+            <input type="radio" id="commercial" name="Account_Type__c" value="Commercial" onclick="toggleCommercialFields()"> Commercial<br>
+            <input type="radio" id="landlord" name="Account_Type__c" value="Landlord"> Landlord<br><br>
 
-            <label for="zip" class="required">Zip</label>
-            <input type="text" id="zip" name="zip" required><br>
+            <div id="commercialFields" style="display:none;">
+                <h2>Commercial Application</h2>
+                <label for="businessName">Business Name</label>
+                <input type="text" id="businessName" name="businessName"><br>
+
+                <label for="federalTaxId">TIN/Federal Tax ID</label>
+                <input type="text" id="federalTaxId" name="federalTaxId"><br>
+                <body>TIN will be used as verification of business. Deposits are billed when starting services. Deposit fees are based on meter size at the service location. A deposit wil be assessed and will be refundable after a year of good pay history or termination of services.</body>
+                <br><br>
+
+                <label for="businessPhone">Business Phone Number</label>
+                <input type="text" id="businessPhone" name="businessPhone"><br>
+
+                <h3>Additional Authorized Contact (Business Manager)</h3>
+                <label>In-House</label>
+                <input type="radio" id="maintenanceInHouse" name="maintenanceType" value="In-House Maintenance">
+                <br><br>
+                <label>Third-Party</label>
+                <input type="radio" id="maintenanceThirdParty" name="maintenanceType" value="Third Party">
+                <br><br>
+                <label for="additionalContactFirstName">First Name</label>
+                <input type="text" id="additionalContactFirstName" name="additionalContactFirstName" ><br>
+                <label for="additionalContactLastName">Last Name</label>
+                <input type="text" id="additionalContactLastName" name="additionalContactLastName" ><br>
+                <label for="additionalContactPhone">Phone</label>
+                <input type="text" id="additionalContactPhone" name="additionalContactPhone" ><br>
+                <label for="additionalContactEmail">Email</label>
+                <input type="email" id="additionalContactEmail" name="additionalContactEmail" ><br>
+                <label for="additionalCompanyName">If Third-Party: Business Name</label>
+                <input type="text" id="additionalCompanyName" name="additionalCompanyName"><br>
+
+            </div>
             <div class="button-container">
                 <button type="button" onclick="nextStep()">Next</button>
             </div>
@@ -56,7 +101,7 @@
 
         <div class="form-step">
             <div id="transferFields" style="display:none;">
-                <h2>Transferring Service: Previous Account Info</h2>
+                <h2>Transferring Service: Previous Account</h2>
                 <label for="previousServiceStopDate">Previous Service Stop Date</label>
                 <input type="date" id="previousServiceStopDate" name="previousServiceStopDate"><br>
         
@@ -72,13 +117,6 @@
                 <label for="previousServiceZip">Previous Service Zip</label>
                 <input type="text" id="previousServiceZip" name="previousServiceZip"><br>
                 <br>
-            </div>
-            <div id="secondaryAccountFields">
-                <h2>Secondary Account Owner</h2>
-                <label for="secondaryAccountOwnerName" class="required">Name</label>
-                <input type="text" id="secondaryAccountOwnerName" name="secondaryAccountOwnerName" required><br>
-                <label for="secondaryAccountOwnerPhone" class="required">Phone</label>
-                <input type="text" id="secondaryAccountOwnerPhone" name="secondaryAccountOwnerPhone" required><br>
             </div>
             <br>
             <h2>Mailing Info</h2>
@@ -115,14 +153,13 @@
             </div>
         </div>
 
-
         <!-- Hidden Description Field -->
         <input type="hidden" id="description" name="description">
 
         <input type="hidden" name="Category__c" value="Utilities">
         <input type="hidden" name="Subcategory__c" value="Utility Accounts">
         <input type="hidden" name="Scenario__c" value="Start/Stop Service">
-        <input type="hidden" name="Subject" value="Utility Service Application (Web Submission)">
+        <input type="hidden" id="Subject" name="Subject" value="Utility Service Application (Web Submission)">
         <input type="hidden" id="SuppliedName" name="first_name">
 
 
