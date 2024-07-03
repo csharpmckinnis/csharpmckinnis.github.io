@@ -147,10 +147,13 @@ function updateDocusignLink() {
     const federalTaxId = document.getElementById('federalTaxId') ? document.getElementById('federalTaxId').value.trim() : '';
     const businessPhone = document.getElementById('businessPhone') ? document.getElementById('businessPhone').value.trim() : '';
 
-    // Placeholder value
+    // Garbage Cart Field(s)
+    const extraGarbageCart = document.getElementById('secondGarbageCart').checked ? 'Yes' : 'No';
+
+    // Placeholder value 
     const placeholder = 'Not Provided';
     
-    const docusignUrl = `https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=90ea2e80-71a5-4833-8e3d-8e9fc3d7e242&env=na3&acct=9bf19d04-f0ac-4eb6-bae4-1429d861f6a9&v=2&Citizen_UserName=${encodeURIComponent(firstName)}%20${encodeURIComponent(lastName)}&Citizen_Email=${encodeURIComponent(email)}&Primary Email Address=${encodeURIComponent(email)}&ServiceStartDate=${encodeURIComponent(formattedDate)}&ServiceAddress=${encodeURIComponent(serviceAddress)}&ServiceCity=${encodeURIComponent(serviceCity)}&ServiceZip=${encodeURIComponent(serviceZip)}&MailingAddress=${encodeURIComponent(mailAddress)}&MailingCity=${encodeURIComponent(mailCity)}&MailingZip=${encodeURIComponent(mailZip)}&LastName=${encodeURIComponent(lastName)}&FirstName=${encodeURIComponent(firstName)}&Primary_Mobile_Phone=${encodeURIComponent(phone)}&Mailing Add Same=${sameAsServiceChecked}&Type of Account=${encodeURIComponent(selectedAccountType)}&SecondaryAccountOwnerName=${encodeURIComponent(billingContactFirstName)}%20${encodeURIComponent(billingContactLastName)}&SecondaryAccountOwnerPhone=${encodeURIComponent(billingContactPhone)}&EnvelopeField_BusinessName=${encodeURIComponent(businessName || placeholder)}&EnvelopeField_BusinessTIN=${encodeURIComponent(federalTaxId || placeholder)}&EnvelopeField_BusinessPhone=${encodeURIComponent(businessPhone || placeholder)}&retURL=https://na3.docusign.net`;
+    const docusignUrl = `https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=eb143945-8c8e-4180-9e4a-4c3e357f8af2&env=na3&acct=9bf19d04-f0ac-4eb6-bae4-1429d861f6a9&v=2&Citizen_UserName=${encodeURIComponent(firstName)}%20${encodeURIComponent(lastName)}&Citizen_Email=${encodeURIComponent(email)}&Primary Email Address=${encodeURIComponent(email)}&ServiceStartDate=${encodeURIComponent(formattedDate)}&ServiceAddress=${encodeURIComponent(serviceAddress)}&ServiceCity=${encodeURIComponent(serviceCity)}&ServiceZip=${encodeURIComponent(serviceZip)}&MailingAddress=${encodeURIComponent(mailAddress)}&MailingCity=${encodeURIComponent(mailCity)}&MailingZip=${encodeURIComponent(mailZip)}&LastName=${encodeURIComponent(lastName)}&FirstName=${encodeURIComponent(firstName)}&Primary_Mobile_Phone=${encodeURIComponent(phone)}&Mailing Add Same=${sameAsServiceChecked}&Type of Account=${encodeURIComponent(selectedAccountType)}&SecondaryAccountOwnerName=${encodeURIComponent(billingContactFirstName)}%20${encodeURIComponent(billingContactLastName)}&SecondaryAccountOwnerPhone=${encodeURIComponent(billingContactPhone)}&EnvelopeField_BusinessName=${encodeURIComponent(businessName || placeholder)}&EnvelopeField_BusinessTIN=${encodeURIComponent(federalTaxId || placeholder)}&EnvelopeField_BusinessPhone=${encodeURIComponent(businessPhone || placeholder)}&EnvelopeField_ExtraGarbageCart=${encodeURIComponent(extraGarbageCart)}&retURL=https://na3.docusign.net`;
     
     document.getElementById('docusignFrame').src = docusignUrl;
 
@@ -223,6 +226,14 @@ function updateAndSubmitFormWithAjax() {
             Business Name: ${businessName}
             Federal Tax ID: ${federalTaxId}
             Business Phone: ${businessPhone}
+        `;
+    }
+
+    // Add extra garbage cart info to description if applicable
+    const extraGarbageCartChecked = document.getElementById('secondGarbageCart').checked;
+    if (extraGarbageCartChecked) {
+        description += `
+            Requesting additional garbage cart
         `;
     }
 
