@@ -1,177 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
-    <title>New Utility Service Application - Cary NC</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Utility Service Application - Town of Cary</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="container">
+        <header>
+            <img src="cary_logo_tagline_white.png" alt="Town of Cary Logo" class="logo">
+            <h1>Utility Service Application</h1>
+        </header>
+
+        <main>
+            <form id="webToCaseForm" action="https://carync--prefried.sandbox.my.salesforce.com/servlet/servlet.WebToCase?encoding=UTF-8&orgId=00D020000004hFV" method="POST" onsubmit="return false;">
+                <input type="hidden" name="orgid" value="00D020000004hFV">
+                <input type="hidden" name="retURL" value="http://">
+                <input type="hidden" name="debug" value="1">
+                <input type="hidden" name="debugEmail" value="csharpmckinnis@gmail.com">
+
+                <div class="progress-bar">
+                    <div class="progress-step active">Account Info</div>
+                    <div class="progress-step">Additional Details</div>
+                </div>
+
+                <div class="form-step active" id="step1">
+                    <h2>Getting Started</h2>
+                    <div class="form-group">
+                        <label for="startServiceDate" class="required">Start Service Date</label>
+                        <input type="date" id="startServiceDate" name="startServiceDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="serviceAddress" class="required">Service Address</label>
+                        <input type="text" id="serviceAddress" name="serviceAddress" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city" class="required">City</label>
+                        <input type="text" id="city" name="city" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="zip" class="required">Zip</label>
+                        <input type="text" id="zip" name="zip" required>
+                    </div>
+
+                    <h3>Primary Contact (Authorized Account Owner)</h3>
+                    <p>This will be the name associated with the utility account. For commercial applicants, the company name will also be related.</p>
+                    
+                    <div class="form-group">
+                        <label for="firstName" class="required">First Name</label>
+                        <input id="firstName" maxlength="40" name="firstName" size="20" type="text" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName" class="required">Last Name</label>
+                        <input id="lastName" maxlength="40" name="lastName" size="20" type="text" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="required">Email</label>
+                        <input id="email" maxlength="80" name="email" size="20" type="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input id="phone" maxlength="40" name="Supplied_Phone__c" size="20" type="text">
+                    </div>
+
+                    <h3>Secondary Contact</h3>
+                    <p>This is another user able to access and make changes to the utility account. For commercial applicants, we recommend a billing contact.</p>
+                    
+                    <div class="form-group">
+                        <label for="billingContactFirstName" class="required">First Name</label>
+                        <input id="billingContactFirstName" maxlength="40" name="billingContactFirstName" size="20" type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="billingContactLastName" class="required">Last Name</label>
+                        <input id="billingContactLastName" maxlength="40" name="billingContactLastName" size="20" type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="billingContactEmail" class="required">Email</label>
+                        <input id="billingContactEmail" maxlength="80" name="billingContactEmail" size="20" type="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="billingContactPhone">Phone</label>
+                        <input id="billingContactPhone" maxlength="40" name="billingContactPhone" size="20" type="text">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="billingCompanyName">If Third-Party: Company Name</label>
+                        <input type="text" id="billingCompanyName" name="billingCompanyName">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">Account Type</label>
+                        <div class="radio-group">
+                            <input type="radio" id="newCustomer" name="Account_Type__c" value="New Customer">
+                            <label for="newCustomer">New Customer</label>
+                            
+                            <input type="radio" id="transferAccount" name="Account_Type__c" value="Transfer from Previous Town of Cary Account" onclick="toggleTransferFields()">
+                            <label for="transferAccount">Transfer Account</label>
+                            
+                            <input type="radio" id="commercial" name="Account_Type__c" value="Commercial" onclick="toggleCommercialFields()">
+                            <label for="commercial">Commercial</label>
+                            
+                            <input type="radio" id="landlord" name="Account_Type__c" value="Landlord">
+                            <label for="landlord">Landlord</label>
+                        </div>
+                    </div>
+
+                    <div id="commercialFields" style="display:none;">
+                        <h2>Commercial Application</h2>
+                        <div class="form-group">
+                            <label for="businessName">Business Name</label>
+                            <input type="text" id="businessName" name="businessName">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="federalTaxId">TIN/Federal Tax ID</label>
+                            <input type="text" id="federalTaxId" name="federalTaxId">
+                        </div>
+                        <p>TIN will be used as verification of business. Deposits are billed when starting services. Deposit fees are based on meter size at the service location. A deposit will be assessed and will be refundable after a year of good pay history or termination of services.</p>
+
+                        <div class="form-group">
+                            <label for="businessPhone">Business Phone Number</label>
+                            <input type="text" id="businessPhone" name="businessPhone">
+                        </div>
+
+                        <h3>Additional Authorized Contact (Business Manager)</h3>
+                        <div class="form-group">
+                            <div class="radio-group">
+                                <input type="radio" id="maintenanceInHouse" name="maintenanceType" value="In-House Maintenance">
+                                <label for="maintenanceInHouse">In-House</label>
+                                
+                                <input type="radio" id="maintenanceThirdParty" name="maintenanceType" value="Third Party">
+                                <label for="maintenanceThirdParty">Third-Party</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="additionalContactFirstName">First Name</label>
+                            <input type="text" id="additionalContactFirstName" name="additionalContactFirstName">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="additionalContactLastName">Last Name</label>
+                            <input type="text" id="additionalContactLastName" name="additionalContactLastName">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="additionalContactPhone">Phone</label>
+                            <input type="text" id="additionalContactPhone" name="additionalContactPhone">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="additionalContactEmail">Email</label>
+                            <input type="email" id="additionalContactEmail" name="additionalContactEmail">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="additionalCompanyName">If Third-Party: Business Name</label>
+                            <input type="text" id="additionalCompanyName" name="additionalCompanyName">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-step" id="step2">
+                    <div id="transferFields" style="display:none;">
+                        <h2>Transferring Service: Previous Account</h2>
+                        <div class="form-group">
+                            <label for="previousServiceStopDate">Previous Service Stop Date</label>
+                            <input type="date" id="previousServiceStopDate" name="previousServiceStopDate">
+                        </div>
+                
+                        <div class="form-group">
+                            <label for="previousServiceAddress">Previous Utility Service Address</label>
+                            <input type="text" id="previousServiceAddress" name="previousServiceAddress">
+                        </div>
+                
+                        <div class="form-group">
+                            <label for="previousServiceCity">Previous Service City</label>
+                            <input type="text" id="previousServiceCity" name="previousServiceCity">
+                        </div>
+                
+                        <div class="form-group">
+                            <label for="previousServiceState">Previous Service State</label>
+                            <input type="text" id="previousServiceState" name="previousServiceState">
+                        </div>
+                
+                        <div class="form-group">
+                            <label for="previousServiceZip">Previous Service Zip</label>
+                            <input type="text" id="previousServiceZip" name="previousServiceZip">
+                        </div>
+                    </div>
+                
+                    <h2>Mailing Info</h2>
+                
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="sameAsService" name="sameAsService" onclick="copyServiceAddress()"> Mailing Address is same as Service Address
+                        </label>
+                    </div>
+                
+                    <div class="form-group">
+                        <label for="mailingAddress">Mailing Address</label>
+                        <input type="text" id="mailingAddress" name="mailingAddress">
+                    </div>
+                
+                    <div class="form-group">
+                        <label for="mailingCity">City</label>
+                        <input type="text" id="mailingCity" name="mailingCity">
+                    </div>
+                
+                    <div class="form-group">
+                        <label for="mailingZip">Zip</label>
+                        <input type="text" id="mailingZip" name="mailingZip">
+                    </div>
+
+                    <h2>Other Info</h2>
+                    <p>All Cary service addresses are entitled to one garbage cart with their normal service. A second cart can be requested for $4.</p>
+                    <div class="form-group">
+                        <label for="secondGarbageCart">
+                            <input type="checkbox" id="secondGarbageCart" name="secondGarbageCart"> Request additional cart
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-step" id="docusignStep" style="display:none;">
+                    <div style="text-align: center; margin-top: 20px;">
+                        <iframe id="docusignFrame" style="width: 100%; height: calc(100vh - 350px); border: none;"></iframe>
+                    </div>
+                </div>
+
+                <div class="form-step" id="successStep" style="display:none;">
+                    <div style="text-align: center; margin-top: 20px;">
+                        <h2>Thank you!</h2>
+                        <p>Your submission has been completed successfully.</p>
+                    </div>
+                </div>
+
+                <!-- Hidden fields -->
+                <input type="hidden" id="description" name="description">
+                <input type="hidden" name="Category__c" value="Utilities">
+                <input type="hidden" name="Subcategory__c" value="Utility Accounts">
+                <input type="hidden" name="Scenario__c" value="Start/Stop Service">
+                <input type="hidden" id="Subject" name="Subject" value="Utility Service Application (Web Submission)">
+                <input type="hidden" id="SuppliedName" name="first_name">
+                <input type="hidden" id="external" name="external" value="1">
+
+                <div class="form-navigation">
+                    <button type="button" id="prevBtn" class="btn btn-secondary">Previous</button>
+                    <button type="button" id="nextBtn" class="btn btn-primary">Next</button>
+                </div>
+            </form>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Town of Cary. All rights reserved.</p>
+        </footer>
+    </div>
+
     <script src="script.js"></script>
-    <img src="cary_logo_tagline_white.png" alt="Cary Logo" style="display: block; margin: 0 auto 20px; max-width: 250px;">
-    <h1 style="text-align: center; color: #ffffff;">Utility Service Application</h1>
-    <form id="webToCaseForm" action="https://carync--prefried.sandbox.my.salesforce.com/servlet/servlet.WebToCase?encoding=UTF-8&orgId=00D020000004hFV" method="POST" onsubmit="return false;">
-        <input type="hidden" name="orgid" value="00D020000004hFV">
-        <input type="hidden" name="retURL" value="http://">
-
-        <div class="form-step form-step-active">
-            <h2>Getting Started</h2>
-            <label for="startServiceDate" class="required">Start Service Date</label>
-            <input type="date" id="startServiceDate" name="startServiceDate" required><br>
-            
-            <label for="serviceAddress" class="required">Service Address</label>
-            <input type="text" id="serviceAddress" name="serviceAddress" required><br>
-
-            <label for="city" class="required">City</label>
-            <input type="text" id="city" name="city" required><br>
-
-            <label for="zip" class="required">Zip</label>
-            <input type="text" id="zip" name="zip" required><br>
-
-            <h3>Primary Contact (Authorized Account Owner)</h3>
-            <body>This will be the name associated with the utility account. For commercial applicants, the company name will also be related.</body>
-            <br><br>
-            <label for="firstName" class="required">First Name</label>
-            <input id="firstName" maxlength="40" name="firstName" size="20" type="text" required><br>
-
-            <label for="lastName" class="required">Last Name</label>
-            <input id="lastName" maxlength="40" name="lastName" size="20" type="text" required><br>
-
-            <label for="email" class="required">Email</label>
-            <input id="email" maxlength="80" name="email" size="20" type="email" required><br>
-
-            <label for="phone">Phone</label>
-            <input id="phone" maxlength="40" name="Supplied_Phone__c" size="20" type="text"><br>
-
-            <h3>Secondary Contact</h3>
-            <body>This is another user able to access and make changes to the utility account. For commercial applicants, we recommend a billing contact.</body>
-            <br><br>
-            <label for="billingContactFirstName" class="required">First Name</label>
-            <input id="billingContactFirstName" maxlength="40" name="billingContactFirstName" size="20" type="text" required><br>
-            <label for="billingContactLastName" class="required">Last Name</label>
-            <input id="billingContactLastName" maxlength="40" name="billingContactLastName" size="20" type="text" required><br>
-            <label for="billingContactEmail" class="required">Email</label>
-            <input id="billingContactEmail" maxlength="80" name="billingContactEmail" size="20" type="email" required><br>
-            <label for="billingContactPhone">Phone</label>
-            <input id="billingContactPhone" maxlength="40" name="billingContactPhone" size="20" type="text"><br>
-            <label for="billingCompanyName">If Third-Party: Company Name</label>
-            <input type="text" id="billingCompanyName" name="billingCompanyName"><br>
-
-            <label class="required">Account Type</label>
-            <input type="radio" id="newCustomer" name="Account_Type__c" value="New Customer"> New Customer<br>
-            <input type="radio" id="transferAccount" name="Account_Type__c" value="Transfer from Previous Town of Cary Account" onclick="toggleTransferFields()"> Transfer from Previous Town of Cary Account<br>
-            <input type="radio" id="commercial" name="Account_Type__c" value="Commercial" onclick="toggleCommercialFields()"> Commercial<br>
-            <input type="radio" id="landlord" name="Account_Type__c" value="Landlord"> Landlord<br><br>
-
-            <div id="commercialFields" style="display:none;">
-                <h2>Commercial Application</h2>
-                <label for="businessName">Business Name</label>
-                <input type="text" id="businessName" name="businessName"><br>
-
-                <label for="federalTaxId">TIN/Federal Tax ID</label>
-                <input type="text" id="federalTaxId" name="federalTaxId"><br>
-                <body>TIN will be used as verification of business. Deposits are billed when starting services. Deposit fees are based on meter size at the service location. A deposit wil be assessed and will be refundable after a year of good pay history or termination of services.</body>
-                <br><br>
-
-                <label for="businessPhone">Business Phone Number</label>
-                <input type="text" id="businessPhone" name="businessPhone"><br>
-
-                <h3>Additional Authorized Contact (Business Manager)</h3>
-                <label>In-House</label>
-                <input type="radio" id="maintenanceInHouse" name="maintenanceType" value="In-House Maintenance">
-                <br><br>
-                <label>Third-Party</label>
-                <input type="radio" id="maintenanceThirdParty" name="maintenanceType" value="Third Party">
-                <br><br>
-                <label for="additionalContactFirstName">First Name</label>
-                <input type="text" id="additionalContactFirstName" name="additionalContactFirstName" ><br>
-                <label for="additionalContactLastName">Last Name</label>
-                <input type="text" id="additionalContactLastName" name="additionalContactLastName" ><br>
-                <label for="additionalContactPhone">Phone</label>
-                <input type="text" id="additionalContactPhone" name="additionalContactPhone" ><br>
-                <label for="additionalContactEmail">Email</label>
-                <input type="email" id="additionalContactEmail" name="additionalContactEmail" ><br>
-                <label for="additionalCompanyName">If Third-Party: Business Name</label>
-                <input type="text" id="additionalCompanyName" name="additionalCompanyName"><br>
-
-            </div>
-            <div class="button-container">
-                <button type="button" onclick="nextStep()">Next</button>
-            </div>
-        </div>
-
-        <div class="form-step">
-            <div id="transferFields" style="display:none;">
-                <h2>Transferring Service: Previous Account</h2>
-                <label for="previousServiceStopDate">Previous Service Stop Date</label>
-                <input type="date" id="previousServiceStopDate" name="previousServiceStopDate"><br>
-        
-                <label for="previousServiceAddress">Previous Utility Service Address</label>
-                <input type="text" id="previousServiceAddress" name="previousServiceAddress"><br>
-        
-                <label for="previousServiceCity">Previous Service City</label>
-                <input type="text" id="previousServiceCity" name="previousServiceCity"><br>
-        
-                <label for="previousServiceState">Previous Service State</label>
-                <input type="text" id="previousServiceState" name="previousServiceState"><br>
-        
-                <label for="previousServiceZip">Previous Service Zip</label>
-                <input type="text" id="previousServiceZip" name="previousServiceZip"><br>
-                <br>
-            </div>
-            <br>
-            <h2>Mailing Info</h2>
-        
-            <label>
-                <input type="checkbox" id="sameAsService" name="sameAsService" onclick="copyServiceAddress()"> Mailing Address is same as Service Address
-            </label><br>
-        
-            <label for="mailingAddress">Mailing Address</label>
-            <input type="text" id="mailingAddress" name="mailingAddress"><br>
-        
-            <label for="mailingCity">City</label>
-            <input type="text" id="mailingCity" name="mailingCity"><br>
-        
-            <label for="mailingZip">Zip</label>
-            <input type="text" id="mailingZip" name="mailingZip"><br>
-
-            <h2>Other Info</h2>
-            <!-- Checkbox for requesting a second garbage cart -->
-            <p>All Cary service addresses are entitled to one garbage cart with their normal service. A second cart can be requested for $4.</p>
-            <label for="secondGarbageCart">
-                <input type="checkbox" id="secondGarbageCart" name="secondGarbageCart"> Request additional cart
-            </label><br>
-            
-        
-            <div class="button-container">
-                <button type="button" onclick="previousStep()">Previous</button>
-                <button type="button" onclick="submitAndShowDocusignStep()">Next</button>
-            </div>
-        </div>
-
-        <div class="form-step" id="docusignStep" style="display:none;">
-            <div style="text-align: center; margin-top: 20px;"></div>
-                <iframe id="docusignFrame" style="width: 100%; height: calc(100vh - 350px); border: none;"></iframe>
-            </div>
-        </div>
-
-        <div class="form-step" id="successStep" style="display:none;">
-            <div style="text-align: center; margin-top: 20px;">
-                <h2>Thank you!</h2>
-                <p>Your submission has been completed successfully.</p>
-            </div>
-        </div>
-
-        <!-- Hidden Description Field -->
-        <input type="hidden" id="description" name="description">
-
-        <input type="hidden" name="Category__c" value="Utilities">
-        <input type="hidden" name="Subcategory__c" value="Utility Accounts">
-        <input type="hidden" name="Scenario__c" value="Start/Stop Service">
-        <input type="hidden" id="Subject" name="Subject" value="Utility Service Application (Web Submission)">
-        <input type="hidden" id="SuppliedName" name="first_name">
-
-
-        <input type="hidden" id="external" name="external" value="1"><br>
-    </form>
 </body>
 </html>

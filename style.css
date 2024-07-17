@@ -1,91 +1,191 @@
-body {
-    font-family: 'Lucida Sans Unicode', sans-serif;
-    margin: 20px;
-    background-color: #003e7a;
+:root {
+    --primary-color: #003e7a;
+    --secondary-color: #007bff;
+    --accent-color: #ffc107;
+    --text-color: #333;
+    --background-color: #f8f9fa;
+    --border-color: #dee2e6;
 }
-form {
-    max-width: 600px;
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+}
+
+.container {
+    max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #ffffff;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-radius: 8px;
+}
+
+.logo {
+    max-width: 200px;
+    margin-bottom: 15px;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+form {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.progress-step {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+}
+
+.progress-step.active {
+    background-color: var(--secondary-color);
+    color: white;
 }
 
 .form-step {
     display: none;
 }
-.form-step-active {
+
+.form-step.active {
     display: block;
 }
-.step-indicator {
-    display: flex;
-    justify-content: space-between;
+
+.form-group {
     margin-bottom: 20px;
-    padding: 0;
-    list-style: none;
 }
-.step-indicator li {
-    flex: 1;
-    text-align: center;
-    padding: 10px;
-    border-top: 2px solid #ccc;
-}
-.step-indicator li.active {
-    border-top: 2px solid #007bff;
-    font-weight: bold;
-    color: #007bff;
-}
+
 label {
     display: block;
-    margin-bottom: 8px;
-    font-weight: normal;
-    color: #333;
+    margin-bottom: 5px;
+    font-weight: bold;
 }
-.required:after {
-    content: " *";
-    color: red;
-}
+
 input[type="text"],
 input[type="email"],
 input[type="date"],
-input[type="hidden"] {
-    width: calc(100% - 20px);
+textarea {
+    width: 100%;
     padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
     font-size: 16px;
 }
-input[type="checkbox"] {
-    margin-bottom: 10px;
+
+.radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
-button {
-    display: inline-block;
+
+.radio-group input[type="radio"] {
+    display: none;
+}
+
+.radio-group label {
+    padding: 10px 15px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.radio-group input[type="radio"]:checked + label {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.form-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.btn {
     padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
-button:hover {
-    background-color: #0056b3;
+.btn-primary {
+    background-color: var(--secondary-color);
+    color: white;
 }
 
-h1 {
-    font-size:300%;
-    font-weight: bold;
-    font-family: 'Lucida Sans Unicode', sans-serif;
-    margin-top: 2%;
-    margin-bottom: 2%;
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
 }
-h2 {
-    font-size: 150%;
-    font-weight: lighter;
-    font-family: 'Lucida Sans Unicode', sans-serif;
-    margin-top: 0%;
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+footer {
+    text-align: center;
+    margin-top: 30px;
+    color: #6c757d;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+    
+    form {
+        padding: 20px;
+    }
+    
+    .progress-bar {
+        flex-direction: column;
+    }
+    
+    .progress-step {
+        margin-bottom: 10px;
+    }
+}
+
+.error {
+    border: 1px solid red;
 }

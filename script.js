@@ -1,129 +1,164 @@
+// Global variables
 let currentStep = 0;
-let sameAsServiceChecked = '';
+const totalSteps = 2;
+
 let selectedAccountType = '';
+let sameAsServiceChecked = '';
 
-document.addEventListener('DOMContentLoaded', () => {
+// DOM elements
+const form = document.getElementById('webToCaseForm');
+const steps = document.querySelectorAll('.form-step');
+const progressSteps = document.querySelectorAll('.progress-step');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', initForm);
+form.addEventListener('change', handleFormChange);
+prevBtn.addEventListener('click', () => navigateStep(-1));
+nextBtn.addEventListener('click', handleNextButtonClick);
+
+function initForm() {
+    showStep(currentStep);
     document.getElementById('sameAsService').addEventListener('change', copyServiceAddress);
-});
+    document.getElementById('sameAsService').addEventListener('change', function() {
+        sameAsServiceChecked = 'x';
+        toggleCommercialFields();
+    });
 
-///function monitorIframe() {
-///    const iframe = document.getElementById('docusignFrame');
-///    setInterval(function() {
-///        try {
-///            const nextURL = iframe.contentWindow.location.href;
-///            if (nextURL.includes('carync.gov')) {
-///                showSuccessStep();
-///            }
-///        } catch (e) {
-///            // Handle the error if cross-origin access is not allowed
-///         console.error('Error accessing iframe content:', e);
-///        }
-///    }, 1000); // Check every second
-///}
+    document.getElementById('newCustomer').addEventListener('change', function() {
+        selectedAccountType = this.checked ? 'New Customer' : '';
+        toggleTransferFields(); // Ensure fields are toggled when switching between radio buttons
+        toggleCommercialFields();
+    });
 
-function showStep(step) {
-    console.log('running showStep');
-    const steps = document.querySelectorAll('.form-step');
-    steps.forEach((stepElement, index) => {
-        stepElement.style.display = (index === step) ? 'block' : 'none';
+    document.getElementById('transferAccount').addEventListener('change', function() {
+        selectedAccountType = this.checked ? 'Transfer from Previous Town of Cary Account' : '';
+        toggleTransferFields(); // Ensure fields are toggled when switching between radio buttons
+        toggleCommercialFields();
+    });
+
+    document.getElementById('landlord').addEventListener('change', function() {
+        selectedAccountType = this.checked ? 'Landlord' : '';
+        toggleTransferFields(); // Ensure fields are toggled when switching between radio buttons
+        toggleCommercialFields();
+    });
+    document.getElementById('commercial').addEventListener('change', function() {
+        selectedAccountType = this.checked ? 'Commercial' : '';
+        toggleTransferFields();
     });
 }
 
-function nextStep() {
-    console.log('running nextStep');
-    if (!validateStep(currentStep)) {
+function handleNextButtonClick() {
+    if (currentStep === totalSteps - 1) {
+        if (validateStep(currentStep)) {
+            submitAndShowDocusignStep();
+        }
+    } else {
+        navigateStep(1);
+    }
+}
+
+function navigateStep(direction) {
+    const newStep = currentStep + direction;
+    if (newStep >= 0 && newStep < totalSteps && validateStep(currentStep)) {
+        currentStep = newStep;
+        showStep(currentStep);
+    }
+}
+
+function handleFormChange(event) {
+    const { name, value, type, checked } = event.target;
+    
+    if (name === 'Account_Type__c') {
+        if (value === 'Transfer from Previous Town of Cary Account') {
+            toggleTransferFields();
+        } else if (value === 'Commercial') {
+            toggleCommercialFields();
+        }
+    }
+}
+
+function showStep(step) {
+    steps.forEach((stepElement, index) => {
+        stepElement.style.display = index === step ? 'block' : 'none';
+    });
+
+    progressSteps.forEach((progressStep, index) => {
+        progressStep.classList.toggle('active', index === step);
+    });
+
+    prevBtn.style.display = step === 0 ? 'none' : 'inline-block';
+    nextBtn.textContent = step === totalSteps - 1 ? 'Submit' : 'Next';
+}
+
+
+
+function validateStep(step) {
+    if (step < 0 || step >= steps.length) {
+        console.error(`Invalid step: ${step}`);
+        return false;
+    }
+
+    const currentStepElement = steps[step];
+    const requiredFields = currentStepElement.querySelectorAll('input[required], select[required], textarea[required]');
+    
+    let isValid = true;
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            isValid = false;
+            field.classList.add('error');
+        } else {
+            field.classList.remove('error');
+        }
+    });
+
+    if (!isValid) {
         alert("Please fill out all required fields.");
         return false;
     }
-    currentStep++;
-    showStep(currentStep);
-}
 
-function previousStep() {
-    console.log('running previousStep');
-    currentStep--;
-    showStep(currentStep);
-}
-
-function validateStep(step) {
-    console.log('running validateStep');
-    const steps = document.querySelectorAll('.form-step');
-    const inputs = steps[step].querySelectorAll('input[required], textarea[required]');
-    for (let input of inputs) {
-        if (!input.value.trim()) {
-            return false;
-        }
-    }
-    // Check if at least one radio button is selected
-    if (step === 0) { // Assuming the radio buttons are in the first step
-        const radioButtons = document.querySelectorAll('input[name="Account_Type__c"]');
-        let isChecked = false;
-        for (let radioButton of radioButtons) {
-            if (radioButton.checked) {
-                isChecked = true;
-                break;
-            }
-        }
-        if (!isChecked) {
+    if (step === 0) {
+        const accountTypeRadios = document.querySelectorAll('input[name="Account_Type__c"]');
+        if (!Array.from(accountTypeRadios).some(radio => radio.checked)) {
             alert("Please select an account type.");
             return false;
         }
     }
+
     return true;
 }
 
 function copyServiceAddress() {
-    console.log('running copyServiceAddress');
-    
-    const serviceAddress = document.getElementById('serviceAddress');
-    const city = document.getElementById('city');
-    const zip = document.getElementById('zip');
-    const mailingAddress = document.getElementById('mailingAddress');
-    const mailingCity = document.getElementById('mailingCity');
-    const mailingZip = document.getElementById('mailingZip');
     const sameAsService = document.getElementById('sameAsService');
+    const fields = [
+        { from: 'serviceAddress', to: 'mailingAddress' },
+        { from: 'city', to: 'mailingCity' },
+        { from: 'zip', to: 'mailingZip' }
+    ];
 
-    if (!serviceAddress || !city || !zip || !mailingAddress || !mailingCity || !mailingZip || !sameAsService) {
-        console.error('One or more elements are missing in the DOM.');
-        return;
-    }
-
-    if (sameAsService.checked) {
-        mailingAddress.value = serviceAddress.value;
-        mailingCity.value = city.value;
-        mailingZip.value = zip.value;
-    } else {
-        mailingAddress.value = '';
-        mailingCity.value = '';
-        mailingZip.value = '';
-    }
+    fields.forEach(field => {
+        const fromElement = document.getElementById(field.from);
+        const toElement = document.getElementById(field.to);
+        if (fromElement && toElement) {
+            toElement.value = sameAsService.checked ? fromElement.value : '';
+        }
+    });
 }
 
 function toggleTransferFields() {
-    console.log('running copyTransferFields');
     const transferFields = document.getElementById('transferFields');
-    const transferCheckbox = document.getElementById('transferAccount');
-    if (transferCheckbox.checked) {
-        transferFields.style.display = 'block';
-    } else {
-        transferFields.style.display = 'none';
-    }
+    const transferRadio = document.getElementById('transferAccount');
+    transferFields.style.display = transferRadio.checked ? 'block' : 'none';
 }
 
 function toggleCommercialFields() {
-    console.log('running toggleCommercialFields');
     const commercialFields = document.getElementById('commercialFields');
-    const transferFields = document.getElementById('transferFields');
-    const commercialCheckbox = document.getElementById('commercial');
-    if (commercialCheckbox.checked) {
-        commercialFields.style.display = 'block';
-        transferFields.style.display = 'none';
-    } else {
-        commercialFields.style.display = 'none';
-    }
+    const commercialRadio = document.getElementById('commercial');
+    commercialFields.style.display = commercialRadio.checked ? 'block' : 'none';
 }
 
-function updateDocusignLink() {
+function generateDocusignUrl() {
     console.log('running updateDocusignLink');
     const firstName = document.getElementById('firstName').value.trim();
     const lastName = document.getElementById('lastName').value.trim();
@@ -155,165 +190,87 @@ function updateDocusignLink() {
     const emptyPlaceholder = '';
     
     const docusignUrl = `https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=eb143945-8c8e-4180-9e4a-4c3e357f8af2&env=na3&acct=9bf19d04-f0ac-4eb6-bae4-1429d861f6a9&v=2&Citizen_UserName=${encodeURIComponent(firstName)}%20${encodeURIComponent(lastName)}&Citizen_Email=${encodeURIComponent(email)}&Primary Email Address=${encodeURIComponent(email)}&ServiceStartDate=${encodeURIComponent(formattedDate)}&ServiceAddress=${encodeURIComponent(serviceAddress)}&ServiceCity=${encodeURIComponent(serviceCity)}&ServiceZip=${encodeURIComponent(serviceZip)}&MailingAddress=${encodeURIComponent(mailAddress)}&MailingCity=${encodeURIComponent(mailCity)}&MailingZip=${encodeURIComponent(mailZip)}&LastName=${encodeURIComponent(lastName)}&FirstName=${encodeURIComponent(firstName)}&Primary_Mobile_Phone=${encodeURIComponent(phone)}&Mailing Add Same=${sameAsServiceChecked}&Type of Account=${encodeURIComponent(selectedAccountType)}&SecondaryAccountOwnerName=${encodeURIComponent(billingContactFirstName)}%20${encodeURIComponent(billingContactLastName)}&SecondaryAccountOwnerPhone=${encodeURIComponent(billingContactPhone)}&EnvelopeField_BusinessName=${encodeURIComponent(businessName || placeholder)}&EnvelopeField_BusinessTIN=${encodeURIComponent(federalTaxId || placeholder)}&EnvelopeField_BusinessPhone=${encodeURIComponent(businessPhone || placeholder)}&EnvelopeField_ExtraGarbageCart=${encodeURIComponent(extraGarbageCart)}&SSN=${encodeURIComponent(federalTaxId || emptyPlaceholder)}&retURL=https://na3.docusign.net`;
-    
-    document.getElementById('docusignFrame').src = docusignUrl;
-
-    
+    return docusignUrl;
 }
 
-function updateAndSubmitFormWithAjax() {
-    console.log('running updateAndSubmitFormWithAjax');
-    const form = document.getElementById('webToCaseForm');
-    const formData = new FormData(form);
-
-    // Get form data
-    const firstName = document.getElementById('firstName').value.trim();
-    const lastName = document.getElementById('lastName').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const phone = document.getElementById('phone').value.trim() || 'None provided';
-    const serviceAddress = document.getElementById('serviceAddress').value.trim();
-    const city = document.getElementById('city').value.trim();
-    const zip = document.getElementById('zip').value.trim();
-    const startServiceDate = document.getElementById('startServiceDate').value.trim();
-    const mailingAddress = document.getElementById('mailingAddress').value.trim() || 'None provided';
-    const mailingCity = document.getElementById('mailingCity').value.trim() || 'None provided';
-    const mailingZip = document.getElementById('mailingZip').value.trim() || 'None provided';
-    const accountType = selectedAccountType;
-
-    // Secondary contact fields
-    const billingContactFirstName = document.getElementById('billingContactFirstName').value.trim();
-    const billingContactLastName = document.getElementById('billingContactLastName').value.trim();
-    const billingContactEmail = document.getElementById('billingContactEmail').value.trim();
-    const billingContactPhone = document.getElementById('billingContactPhone').value.trim() || 'None provided';
-    const billingCompanyName = document.getElementById('billingCompanyName') ? document.getElementById('billingCompanyName').value.trim() : '';
-
-    // Commercial fields
-    const businessName = document.getElementById('businessName') ? document.getElementById('businessName').value.trim() : '';
-    const federalTaxId = document.getElementById('federalTaxId') ? document.getElementById('federalTaxId').value.trim() : '';
-    const businessPhone = document.getElementById('businessPhone') ? document.getElementById('businessPhone').value.trim() : '';
-
-    // Validate required fields
-    if (!firstName || !lastName || !email || !serviceAddress || !startServiceDate || !city || !zip || !billingContactFirstName || !billingContactLastName || !billingContactEmail) {
-        alert("Please fill out all required fields.");
-        return false;
-    }
-
-    if (!validateStep(currentStep)) {
-        alert("Please fill out all required fields.");
-        return false;
-    }
-
-    // Create name and description and subject
-    let name = `${firstName} ${lastName}`;
+function updateFormDescription() {
+    const descriptionField = document.getElementById('description');
     let description = `
-        Name: ${name}
-        Email: ${email}
-        Phone: ${phone}
-        Service Address: ${serviceAddress}, ${city} ${zip}
-        Service Start Date: ${startServiceDate}
-        Mailing Address: ${mailingAddress}, ${mailingCity} ${mailingZip}
-        Account Type: ${accountType}
+        Name: ${document.getElementById('firstName').value} ${document.getElementById('lastName').value}
+        Email: ${document.getElementById('email').value}
+        Phone: ${document.getElementById('phone').value || 'Not provided'}
+        Service Address: ${document.getElementById('serviceAddress').value}, ${document.getElementById('city').value} ${document.getElementById('zip').value}
+        Service Start Date: ${document.getElementById('startServiceDate').value}
+        Mailing Address: ${document.getElementById('mailingAddress').value}, ${document.getElementById('mailingCity').value} ${document.getElementById('mailingZip').value}
+        Account Type: ${document.querySelector('input[name="Account_Type__c"]:checked').value}
         
         Secondary Contact:
-        Name: ${billingContactFirstName} ${billingContactLastName}
-        Email: ${billingContactEmail}
-        Phone: ${billingContactPhone}
-        Company Name: ${billingCompanyName}
+        Name: ${document.getElementById('billingContactFirstName').value} ${document.getElementById('billingContactLastName').value}
+        Email: ${document.getElementById('billingContactEmail').value}
+        Phone: ${document.getElementById('billingContactPhone').value || 'Not provided'}
+        Company Name: ${document.getElementById('billingCompanyName').value || 'Not provided'}
     `;
 
-    // Add commercial fields to description if applicable
-    if (accountType === 'Commercial') {
+    if (document.getElementById('commercial').checked) {
         description += `
-            Business Name: ${businessName}
-            Federal Tax ID: ${federalTaxId}
-            Business Phone: ${businessPhone}
+            Business Name: ${document.getElementById('businessName').value}
+            Federal Tax ID: ${document.getElementById('federalTaxId').value}
+            Business Phone: ${document.getElementById('businessPhone').value}
         `;
     }
 
-    // Add extra garbage cart info to description if applicable
-    const extraGarbageCartChecked = document.getElementById('secondGarbageCart').checked;
-    if (extraGarbageCartChecked) {
-        description += `
-            Requesting additional garbage cart
-        `;
+    if (document.getElementById('secondGarbageCart').checked) {
+        description += 'Requesting additional garbage cart\n';
     }
 
-    // Set hidden fields, Description, SuppliedName
-    document.getElementById('description').value = description;
-    formData.append('description', description);
-    document.getElementById('SuppliedName').value = name;
-    formData.append('name', name);
+    descriptionField.value = description.trim();
+}
 
-    // Submit the form data to Salesforce
-    fetch(form.action, {
+function submitFormToSalesforce() {
+    const formData = new FormData(form);
+    
+    return fetch(form.action, {
         method: 'POST',
         body: formData,
-        mode: 'no-cors' // This is important to avoid CORS issues
+        mode: 'no-cors'
     })
     .then(response => {
-        console.log('Form successfully submitted');
-        showDocusignStep(); // Proceed to show DocuSign step
+        console.log('Form submitted successfully');
+        // Since we're using no-cors mode, we can't actually read the response
+        // So we'll resolve the promise if the fetch didn't throw an error
+        return Promise.resolve();
     })
     .catch(error => {
         console.error('Error submitting form:', error);
+        return Promise.reject(error);
     });
-
-    // Update the DocuSign link
-    updateDocusignLink();
-}
-
-function submitAndShowDocusignStep(event) {
-    console.log('running submitAndShowDocusignStep');
-    // Prevent default form submission behavior
-    // Submit the form data to Salesforce using AJAX
-    updateAndSubmitFormWithAjax();
 }
 
 function showDocusignStep() {
-    console.log('running showDocusignStep');
-    // Update the DocuSign iframe URL
-    updateDocusignLink();
+    const docusignStep = document.getElementById('docusignStep');
+    const docusignFrame = document.getElementById('docusignFrame');
 
-    // Show the DocuSign step
-    currentStep = 2; // Set current step to the third step
-    showStep(currentStep); // Show the third step
+    // Update DocuSign URL with form data
+    const docusignUrl = generateDocusignUrl();
+    docusignFrame.src = docusignUrl;
+
+    // Hide current step and show DocuSign step
+    steps[currentStep].style.display = 'none';
+    docusignStep.style.display = 'block';
+
+    // Hide navigation buttons
+    prevBtn.style.display = 'none';
+    nextBtn.style.display = 'none';
 }
 
-
-
-function showSuccessStep() {
-    console.log('running showSuccessStep');
-    document.getElementById('docusignStep').style.display = 'none';
-    document.getElementById('successStep').style.display = 'block';
+function submitAndShowDocusignStep() {
+    updateFormDescription();
+    submitFormToSalesforce()
+        .then(() => {
+            showDocusignStep();
+        })
+        .catch(error => {
+            console.error('Error submitting form:', error);
+            alert('There was an error submitting the form. Please try again.');
+        });
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    showStep(currentStep);
-    
-    document.getElementById('sameAsService').addEventListener('change', function() {
-        sameAsServiceChecked = 'x';
-        toggleCommercialFields();
-    });
-
-    document.getElementById('newCustomer').addEventListener('change', function() {
-        selectedAccountType = this.checked ? 'New Customer' : '';
-        toggleTransferFields(); // Ensure fields are toggled when switching between radio buttons
-        toggleCommercialFields();
-    });
-
-    document.getElementById('transferAccount').addEventListener('change', function() {
-        selectedAccountType = this.checked ? 'Transfer from Previous Town of Cary Account' : '';
-        toggleTransferFields(); // Ensure fields are toggled when switching between radio buttons
-        toggleCommercialFields();
-    });
-
-    document.getElementById('landlord').addEventListener('change', function() {
-        selectedAccountType = this.checked ? 'Landlord' : '';
-        toggleTransferFields(); // Ensure fields are toggled when switching between radio buttons
-        toggleCommercialFields();
-    });
-    document.getElementById('commercial').addEventListener('change', function() {
-        selectedAccountType = this.checked ? 'Commercial' : '';
-        toggleTransferFields();
-    });
-});
