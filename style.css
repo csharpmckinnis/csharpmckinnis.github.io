@@ -1,6 +1,6 @@
 :root {
     --primary-color: #003e7a;
-    --secondary-color: #007bff;
+    --secondary-color: #003e7a;
     --accent-color: #ffc107;
     --text-color: #333;
     --background-color: #f8f9fa;
@@ -48,6 +48,10 @@ h1 {
 h2 {
     color: var(--primary-color);
     margin-bottom: 20px;
+}
+
+h3 {
+    padding-bottom: 5px;
 }
 
 form {
@@ -188,4 +192,122 @@ footer {
 
 .error {
     border: 1px solid red;
+}
+
+input.error {
+    border: 2px solid red;
+    background-color: #ffe6e6;
+}
+
+small.error-message {
+    color: red;
+    font-size: 0.875rem;
+}
+
+.name-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.name-fields {
+    display: flex;
+    gap: 1rem; /* Space between fields */
+}
+
+.name-fields input {
+    flex: 1; /* Ensures both fields are the same size */
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+label.required::after {
+    content: " *"; /* Adds a red asterisk for required fields */
+    color: red;
+}
+
+.contact-info-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.contact-info-fields {
+    display: flex;
+    gap: 1rem; /* Space between fields */
+}
+
+.contact-info-fields input {
+    flex: 1; /* Ensures both fields are the same size */
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.two-column-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.two-column-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem; /* Space between columns */
+    justify-content: space-between; /* Spread out items if space allows */
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column; /* Stack label above input */
+    flex: 1; /* Ensures each field takes equal width */
+}
+
+.field-group label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.field-group input {
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.info-icon {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.info-icon .tooltip-text {
+    visibility: hidden;
+    width: 250px; /* Adjust width as needed */
+    background-color: #f9f9f9;
+    color: #333;
+    text-align: left;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%; /* Position above the icon */
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.info-icon:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.info-icon i {
+    color: var(--secondary-color); /* Optional: Icon color */
+    margin-left: 5px;
 }

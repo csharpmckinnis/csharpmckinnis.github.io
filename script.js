@@ -18,6 +18,25 @@ form.addEventListener('change', handleFormChange);
 prevBtn.addEventListener('click', () => navigateStep(-1));
 nextBtn.addEventListener('click', handleNextButtonClick);
 
+document.querySelectorAll('.phone-input').forEach((phoneInput) => {
+    phoneInput.addEventListener('input', function () {
+        let input = this.value.replace(/\D/g, ''); // Remove all non-numeric characters
+        if (input.length > 10) input = input.slice(0, 10); // Limit input to 10 digits
+
+        const areaCode = input.slice(0, 3);
+        const middle = input.slice(3, 6);
+        const last = input.slice(6);
+
+        if (input.length > 6) {
+            this.value = `(${areaCode}) ${middle}-${last}`;
+        } else if (input.length > 3) {
+            this.value = `(${areaCode}) ${middle}`;
+        } else if (input.length > 0) {
+            this.value = `(${areaCode}`;
+        }
+    });
+});
+
 function initForm() {
     showStep(currentStep);
     document.getElementById('sameAsService').addEventListener('change', copyServiceAddress);
@@ -102,31 +121,39 @@ function validateStep(step) {
 
     const currentStepElement = steps[step];
     const requiredFields = currentStepElement.querySelectorAll('input[required], select[required], textarea[required]');
-    
+
     let isValid = true;
-    requiredFields.forEach(field => {
+
+    requiredFields.forEach((field) => {
+        const errorMessage = field.nextElementSibling; // Get the <small> element directly after the field
+
         if (!field.value.trim()) {
             isValid = false;
-            field.classList.add('error');
+            field.classList.add('error'); // Add error styling
+            if (errorMessage) {
+                errorMessage.style.display = 'block'; // Show pre-defined error message
+            }
         } else {
             field.classList.remove('error');
+            if (errorMessage) {
+                errorMessage.style.display = 'none'; // Hide error message
+            }
         }
     });
 
-    if (!isValid) {
-        alert("Please fill out all required fields.");
-        return false;
-    }
-
+    // Additional validation for specific steps (e.g., Step 0 for radio buttons)
     if (step === 0) {
         const accountTypeRadios = document.querySelectorAll('input[name="Account_Type__c"]');
-        if (!Array.from(accountTypeRadios).some(radio => radio.checked)) {
-            alert("Please select an account type.");
-            return false;
+        const accountTypeError = document.querySelector('#accountTypeError'); // Add this as an <small> near your radio buttons
+        if (!Array.from(accountTypeRadios).some((radio) => radio.checked)) {
+            isValid = false;
+            accountTypeError.style.display = 'block';
+        } else {
+            accountTypeError.style.display = 'none';
         }
     }
 
-    return true;
+    return isValid;
 }
 
 function copyServiceAddress() {
