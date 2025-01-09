@@ -190,35 +190,50 @@
                         </div>
 
                         <h3>Additional Authorized Contact (Business Manager)</h3>
-                        <div class="form-group">
-                            <div class="radio-group">
-                                <input type="radio" id="maintenanceInHouse" name="maintenanceType" value="In-House Maintenance">
-                                <label for="maintenanceInHouse">In-House</label>
-                                
-                                <input type="radio" id="maintenanceThirdParty" name="maintenanceType" value="Third Party">
-                                <label for="maintenanceThirdParty">Third-Party</label>
+                        <div class="form-group two-column-group">
+                            <div class="two-column-fields">
+                                <div class="field-group">
+                                    <label for="maintenanceType" class="required">Maintenance Type</label>
+                                    <div class="radio-group">
+                                        <input type="radio" id="maintenanceInHouse" name="maintenanceType" value="In-House Maintenance">
+                                        <label for="maintenanceInHouse">In-House</label>
+
+                                        <input type="radio" id="maintenanceThirdParty" name="maintenanceType" value="Third Party">
+                                        <label for="maintenanceThirdParty">Third-Party</label>
+                                    </div>
+                                </div> 
                             </div>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="additionalContactFirstName">First Name</label>
-                            <input type="text" id="additionalContactFirstName" name="additionalContactFirstName">
+                        <div class="form-group two-column-group">
+                            <div class="two-column-fields">
+                                <div class="field-group">
+                                    <label for="additionalContactFirstName" class="required">First Name</label>
+                                    <input type="text" id="additionalContactFirstName" name="additionalContactFirstName" placeholder="First" required>
+                                    <small class="error-message" style="color: red; display: none;">Please enter a first name</small>
+                                </div>
+                                <div class="field-group">
+                                    <label for="additionalContactLastName" class="required">Last Name</label>
+                                    <input type="text" id="additionalContactLastName" name="additionalContactLastName" placeholder="Last" required>
+                                    <small class="error-message" style="color: red; display: none;">Please enter a last name</small>
+                                </div>
+                            </div>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="additionalContactLastName">Last Name</label>
-                            <input type="text" id="additionalContactLastName" name="additionalContactLastName">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="additionalContactPhone">Phone</label>
-                            <input type="text" id="additionalContactPhone" name="additionalContactPhone" class="phone-input">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="additionalContactEmail">Email</label>
-                            <input type="email" id="additionalContactEmail" name="additionalContactEmail">
-                        </div>
+                        <div class="form-group two-column-group">
+                            <div class="two-column-fields">
+                                <div class="field-group">
+                                    <label for="additionalContactPhone" class="required">Phone</label>
+                                    <input type="text" id="additionalContactPhone" name="additionalContactPhone" placeholder="(919) 123-4567" class="phone-input" required>
+                                    <small class="error-message" style="color: red; display: none;">Please enter a valid phone number</small>
+                                </div>
+                                <div class="field-group">
+                                    <label for="additionalContactEmail" class="required">Email</label>
+                                    <input type="email" id="additionalContactEmail" name="additionalContactEmail" placeholder="firstname.lastname@domain.com" required>
+                                    <small class="error-message" style="color: red; display: none;">Please enter a valid email</small>
+                                </div>
+                            </div>
+                        </div>                        
                         
                         <div class="form-group">
                             <label for="additionalCompanyName">If Third-Party: Business Name</label>
